@@ -1,0 +1,45 @@
+<nav class="navbar w-full flex justify-between items-center p-5 bg-[#35424a]">
+    <h1 class="uppercase font-medium  text-white ">Sistem za evidenciju projekata</h1>
+
+    <ul class=" flex items-center flex-col "  >
+        <li id="user" class="flex items-center cursor-pointer text-white">
+            <%  if(admin) { %>
+             <i class="fa fa-user-circle-o mr-2"></i> Admin 
+             <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            <% }else { %>
+                <i class="fa fa-user-circle-o mr-2"></i> User  
+                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                  </svg>
+                <%}%>
+            </li>
+            
+        <ul id="dropdown" class="hidden bg-[#ddd] p-3 rounded-md space-y-3 flex-col items-center absolute top-14 right-3 w-fit">
+            <li>Postavke</li>
+            <li>
+                <form action="/logout" method="post" id="">
+                   <button class="bg-red-600 px-3 py-1 rounded-md" type="submit"><i class="fa fa-sign-out"></i> Odjava</button>
+                </form>
+            </li>
+        </ul>
+    </ul>
+</nav>        
+
+
+
+<script>
+
+    const user = document.getElementById("user");
+    const dropdown = document.getElementById("dropdown");
+
+    user.onclick = () => {
+        if(dropdown.style.display == "none") {
+            dropdown.style.display = "flex";
+        }else {
+            dropdown.style.display = "none";
+        }
+    }
+
+</script>

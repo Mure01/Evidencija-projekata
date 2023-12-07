@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+
+
+    <main class="flex w-full">
+        <div class="w-[15%]">
+            <%- include("../partials/sidebarAdmin.ejs") %>
+        </div>
+
+        <div class="w-[85%]">
+            <%- include("../partials/navbar.ejs") %>
+            <h1 class="pl-10 pt-5 pb-3 border-b-2 uppercase text-xl  ">spisak zadataka</h1>
+
+            <table class="mt-6 w-11/12 m-auto min-w-max table-auto text-left">
+                <thead>
+                  <tr class="py-2">
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                        <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Projekt
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Zadatak 
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Opis zadatka 
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Status 
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Zavrsni datum</p>
+                    </th>
+                    <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Produktivnost</p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%zadaci.map((zadatak) => {%>
+          
+                  <tr>
+                    <td class="p-4 border-b border-blue-gray-50">
+                      <div class="flex items-center gap-3">
+                        <div class="flex flex-col">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= zadatak.projekat.nazivProjekta%> </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="p-4 border-b border-blue-gray-50">
+                      <div class="flex items-center gap-3">
+                        <div class="flex flex-col">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= zadatak.nazivZadatka %> </p>
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">Start: <%= new Date(zadatak.datumPocetka).toLocaleDateString() %></p>
+                       
+                        </div>
+                      </div>
+                    </td>
+                    <td class="p-4 border-b border-blue-gray-50">
+                      <div class="flex items-center gap-3">
+                        <div class="flex flex-col">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= zadatak.opisZadatka %> </p>
+                        </div>
+                      </div>
+                    </td>
+                    
+                    <td class="p-4 border-b border-blue-gray-50">
+                      <div class="w-max">
+                        <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-1 px-2 text-xs rounded-md" style="opacity: 1;">
+                          <span class=""> <%= zadatak.status %> </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="p-4 border-b border-blue-gray-50">
+                      <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= new Date(zadatak.datumKraja).toLocaleDateString() %> </p>
+                    </td>
+          
+                    <td class="p-4 border-b  border-blue-gray-50 ">
+                      <button>
+                          <i class="fa fa-eye"> </i>
+                        </button>
+                    </td>
+                  </tr>
+                  <%})%>
+                </tbody>
+              </table>
+
+        </div>
+            
+
+            
+            
+    </main>
+
+</body>
+</html>

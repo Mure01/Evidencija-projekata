@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+
+
+    <main class="flex w-full">
+        <div class="w-[15%]">
+            <%- include("../partials/sidebarAdmin.ejs") %>
+        </div>
+
+        <!--Desni prikaz 85%-->
+        <div class="w-[85%]">
+            <%- include("../partials/navbar.ejs") %>
+
+            <h1 class="pl-10 pt-5 pb-3 text-xl border-solid border-[#000] border-b-2 uppercase">Detalji o projektu</h1>
+
+            <!--Prikaz detalja o projektu-->
+
+            <div class="flex w-10/12 m-auto mt-10 justify-start border-solid border-l-8 shadow-xl p-3 rounded-lg border-sky-700">
+                <div class="flex flex-col space-y-5 w-1/2">
+                    <div class="flex flex-col space-y-2">
+                        <p class=" font-semibold">Naziv projekta</p>
+                        <p><%= projekat.nazivProjekta%></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-semibold">Opis projekta</p>
+                        <p><%= projekat.opis%></p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-5">
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-semibold">Pocetni datum</p>
+                        <p><%= new Date(projekat.datumPocetka).toLocaleDateString()%></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-semibold">Datum zavrsetka</p>
+                        <p><%= new Date(projekat.datumKraja).toLocaleDateString()%></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-semibold">Status</p>
+                        <p><%= projekat.status%></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-semibold">Menadzer</p>
+                        <p> <i class="fa fa-user-circle-o "></i> <%= projekat.menadzer_info[0].ime + " " + projekat.menadzer_info[0].prezime%></p>
+                    </div>
+                </div>
+            </div>
+            <!--Kraj detalja o projektu-->
+
+            <!--Radnici i taskovi prikaz -->
+            <div class="flex w-10/12 m-auto mt-10 justify-between ">
+                
+                <!--Radnici-->
+                <div class="w-1/4 flex flex-col space-y-2 border-solid border-t-8 shadow-xl p-3 rounded-lg border-sky-700">
+                    <h1 class="font-semibold">Uposleni na projektu</h1>
+                    <%projekat.radnici_info.map((radnik) => {%>
+                        <p class="pl-3"> <i class="fa fa-user"></i> <%=radnik.ime +" " + radnik.prezime%></p>
+                    <%})%>
+                </div> <!--Kraj radnika-->
+
+
+                    <!--Taskovi-->
+                <div class="w-[70%] flex flex-col space-y-2 border-solid border-t-8 shadow-xl p-3 rounded-lg border-sky-700">
+                    <div class="flex justify-between items-end py-1 px-3 border-b-2 border-solid border-sky-600">
+                        <p>Lista zadataka</p>
+                        <button id="prikaziPopUp" class="text-white bg-sky-600 px-2 py-1 rounded-md">Dodaj zadatak</button>
+                    </div>
+                    <div>
+                        <table class="w-full text-center">
+                            <thead class="border-b-2">
+                                <th class="py-2">Zadatak</th>
+                                <th>Opis</th>
+                                <th>Status</th>
+                                <th>Akcija</th>
+                            </thead>
+                            <tbody>
+                                <%zadaci.map((zadatak) => {%>
+                                    <tr class="border-b-2">
+                                        <td class="py-2"><%=zadatak.nazivZadatka%></td>
+                                        <td class="py-2"><%=zadatak.opisZadatka%></td>
+                                        <td class="py-2"><%=zadatak.status%></td>
+                                        <td class="py-2">Akcija</td>
+                                    </tr>    
+                                <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!--Kraj taskova-->
+
+
+            </div>
+
+            <!--Kraj prikaza radnika i taskova-->
+
+
+            <!--Pocetak prikaza aktivnosti i radova na zadacima projekta-->
+
+            <div class="w-10/12 m-auto mt-8 h-[200px] shadow-2xl border-t-8 border-sky-700 rounded-lg">
+
+
+
+            </div> <!--Kraj aktivnosti i radova-->
+
+
+        </div> <!--Kraj desnog prikaza 85% sirine-->
+            
+            
+    </main>
+
+
+
+    <!--PopUp Model za dodavanje zadatka-->
+
+    <div id="dodajZadatak" class="hidden absolute top-1/2 shadow-2xl w-1/2 m-auto left-1/2 -translate-x-1/2 flex-col space-y-3 -translate-y-1/2 bg-white border-2 p-5 rounded-lg">
+    
+        <h1 class="font-semibold ">Dodaj zadatak</h1>
+        
+        <div>
+            <form class="flex justify-evenly space-x-5 pl-10" method="post" action="/dodajZadatak" >
+                <div class="flex flex-col">
+                    
+                <div class="flex flex-col w-full space-y-2 mb-3">
+
+                    <input name="projekatId" value=<%=projekat._id%> class="hidden" />
+                    <label>Zadatak</label>
+                    <input class="p-2 border-2 border-[#ddd] rounded-md" type="text" name="nazivZadatka" placeholder="Naziv zadatka..." />
+                </div>
+                <div class="flex flex-col w-full space-y-2 mb-3">
+                    <label>Pocetni datum</label>
+                    <input class="p-2 border-2 border-[#ddd] rounded-md" type="date" name="pocetniDatum" />
+                </div>
+                <div class="flex flex-col w-full space-y-2 mb-3">
+                    <label>Zavrsni datum</label>
+                    <input class="p-2 border-2 border-[#251c1c] rounded-md" type="date" name="zavrsniDatum" />
+                </div>
+                <div class="flex flex-col w-full space-y-2 mb-3">
+                    <label>Status</label>
+                    <select name="status" id="" class="p-2 border rounded-sm mb-[30px]" >
+                        <option value="" disabled selected hidden>Odaberite status</option>
+                        <option value="cekanje">Na cekanju</option>
+                        <option value="izrada">U izradi</option>
+                        <option value="zavrsen">Zavrseno</option>
+                    </select>
+                </div>
+    
+            </div> <!--lijevi div u dodavanju zadatka-->
+    
+                <div class="flex flex-col w-full items-end space-y-2 mb-3 relative">
+                    <div class="flex flex-col h-full w-full space-y-2 mb-3 relative">
+    
+                        <label>Opis zadatka</label>
+                        <textarea class="p-2 border-2 w-full h-full border-[#ddd] rounded-md" type="text" name="opisZadatka" placeholder="Opis zadatka..." ></textarea>
+                    </div>
+                    <div class="flex  space-x-2">
+    
+                        <p id="otkazi" class="bg-sky-700 w-fit p-2 cursor-pointer text-white rounded-lg uppercase ">Otkazi</p>
+                        <button type="submit" class="bg-sky-700 w-fit p-2 text-white rounded-lg uppercase ">Dodaj zadatak</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+    <script>
+        const dodaj = document.getElementById("dodajZadatak");
+        const otkazi = document.getElementById("otkazi");
+    
+        otkazi.addEventListener('click', function() {
+                dodaj.style.display = "none";
+        })
+
+        const prikazi = document.getElementById("prikaziPopUp");
+        prikazi.addEventListener('click', function() {
+            dodaj.style.display = "flex";
+        })
+    </script>
+
+</body>
+</html>

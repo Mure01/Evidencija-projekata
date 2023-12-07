@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+
+
+    <main class="flex w-full">
+        <div class="w-[15%]">
+            <%- include("../partials/sidebarAdmin.ejs") %>
+        </div>
+
+        <div class="w-[85%]">
+        <div>
+            <%- include("../partials/navbar.ejs") %>
+        </div>
+        <h1 class="p-5 border-b-2 border-solid border-[#ddd] uppercase font-medium">Dodajte novog zaposlenika</h1>
+
+            <form 
+            action="/dodajRadnika" method="post"
+            class="flex flex-row space-x-6  w-full justify-center mt-5 relative">
+                <div class="flex flex-col space-y-2 w-1/3">
+
+                    <label>Ime</label>
+                    <input required class="bg-[#ddd] p-2 rounded-md mb-[30px]" name="ime"  placeholder="Ime..." type="text"/>
+
+                    <label class="pt-5">Prezime</label>
+                    <input required class="bg-[#ddd] p-2 rounded-md mb-[30px]" name="prezime" placeholder="Prezime..." type="text"/>
+                    
+                    <label class="pt-5">Pravilo</label>
+                    <select required name="pravilo" class="bg-[#ddd] p-2 rounded-md mb-[30px]">
+                    <option value="Admin">Admin</option>
+                    <option value="Menadzer">Menadzer</option>
+                    <option value="Radnik">Radnik</option>
+                </select>
+                <button type="submit" class= "absolute bottom-0 w-1/3 bg-sky-600 p-3 rounded-md text-white uppercase font-medium tracking-widest"> DODAJ </button>
+                
+                
+            </div>
+                <div class="flex flex-col space-y-2 w-1/3">
+                    <label>Email</label>
+                    <input name="email" required class="bg-[#ddd] p-2 rounded-md mb-[30px]" placeholder="Email adresa..." type="email"/>
+                    
+                    <label class="pt-5">Korisnicko ime</label>
+                    <input name="username" required class="bg-[#ddd] p-2 rounded-md mb-[30px]" placeholder="Korisnicko ime..." type="text"/>
+
+                    <label class="pt-5">Lozinka</label>
+                    <input name="password" required class="bg-[#ddd] p-2 rounded-md mb-[30px]" placeholder="*********" type="password"/>
+                    
+                    <label class="pt-5">Potvrdite lozinku</label>
+                    <input name="passworddva" required class="bg-[#ddd] p-2 rounded-md" placeholder="*********" type="password"/>
+                </div>
+
+            </form>
+
+        </div>     
+    </main>
+
+</body>
+</html>

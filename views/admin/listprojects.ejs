@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+
+
+    <main class="flex w-full">
+        <div class="w-[15%]">
+            <%- include("../partials/sidebarAdmin.ejs") %>
+        </div>
+
+        <div class="w-[85%]">
+            <%- include("../partials/navbar.ejs") %>
+
+            <h1 class="pl-10 pt-10 uppercase border-solid border-b-2 border-cyan-800 pb-3 text-xl">lista projekata</h1>
+         
+            
+            <!-- component -->
+<div class="p-6 px-0">
+    <table class="mt-4 w-11/12 m-auto min-w-max table-auto text-left">
+      <thead>
+        <tr class="py-2">
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+              <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Projekt
+            </p>
+          </th>
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+            <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Menadzer 
+            </p>
+          </th>
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+            <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Radnici 
+            </p>
+          </th>
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+            <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Status 
+            </p>
+          </th>
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+            <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Zavrsni datum</p>
+          </th>
+          <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+            <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Pregled/Uredjivanje</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <%projekti.map((projekat) => {%>
+
+        <tr>
+          <td class="p-4 border-b border-blue-gray-50">
+            <div class="flex items-center gap-3">
+              <div class="flex flex-col">
+                <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekat.nazivProjekta%> </p>
+                <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">Start: <%= new Date(projekat.datumPocetka).toLocaleDateString() %></p>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 border-b border-blue-gray-50">
+            <div class="flex items-center gap-3">
+              <div class="flex flex-col">
+                <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekat.menadzer_info[0].ime +" "+ projekat.menadzer_info[0].prezime  %> </p>
+                <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70"><%=  projekat.menadzer_info[0].email%></p>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 border-b border-blue-gray-50">
+            <div class="flex flex-col">
+                        <select>
+                            <option selected hidden disabled>Spisak radnika</option>
+                            <%projekat.radnici_info.map((radnik) => {%>
+                                <option disabled class="p-2">
+
+                                    <%= radnik.ime +" " + radnik.prezime %>
+                                </option>
+                                
+                                <%})%>
+                            </select>                        
+            </div>
+          </td>
+          <td class="p-4 border-b border-blue-gray-50">
+            <div class="w-max">
+              <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-1 px-2 text-xs rounded-md" style="opacity: 1;">
+                <span class=""> <%= projekat.status %> </span>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 border-b border-blue-gray-50">
+            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= new Date(projekat.datumKraja).toLocaleDateString() %> </p>
+          </td>
+
+          <td class="p-4 border-b border-blue-gray-50 ">
+            <button class=" mr-2 relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+              <a href=<%= "/urediProjekat/"+projekat._id %>>
+                <i class="fa fa-pencil"></i>
+              </a>  
+            </button>
+            <button>
+              <a href=<%= "/projectDetails/"+projekat._id %>>
+                <i class="fa fa-eye"> </i>
+              </a>
+              </button>
+          </td>
+        </tr>
+        <%})%>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+            
+
+            
+            
+    </main>
+
+</body>
+</html>

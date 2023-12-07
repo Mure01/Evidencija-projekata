@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+</head>
+<body>
+
+
+    <main class="flex w-full">
+        
+        <div class="w-[15%]">
+            <%- include("../partials/sidebarAdmin.ejs") %>
+        </div>
+
+        <div class="w-[85%]">
+        
+            <div>
+            <%- include("../partials/navbar.ejs") %>
+        </div>
+        
+        <h1 class="p-5 border-b-2 border-solid border-[#ddd] uppercase font-medium">Azurirajte projekat <%=projekat.nazivProjekta%></h1>
+
+            <form   action=<%="/azurirajProjekat/"+projekat._id%> method="post" class="flex flex-col items-center" >
+            
+            <div class="flex flex-row space-x-6  w-full justify-center mt-5 relative">
+            
+            <div class="flex flex-col space-y-2 w-1/3">
+
+                    <label>Naziv projekta</label>
+                    <input required class="p-2 border rounded-sm mb-[30px]" name="nazivProjekta" value=<%= projekat.nazivProjekta %>  placeholder="Ime..." type="text"/>
+
+                    <label class="pt-5">Pocetni datum</label>
+                    <input required class="p-2 border rounded-sm mb-[30px]" name="pocetniDatum" value=<%= new Date(projekat.datumPocetka).toISOString().split('T')[0] %> placeholder="Prezime..." type="date"/>
+                    
+                    <label class="pt-5">Menadzer</label>
+                    <select required name="menadzer" class="p-2 border rounded-sm mb-[30px]">
+                        <option value="" disabled selected hidden>Odaberite menadzera</option>
+
+                        <% menadzeri.map((menadzer) => { %>
+                            <option value=<%=menadzer.username %>><%= menadzer.ime +" " + menadzer.prezime%></option>
+                            <%})%>
+                    </select>
+            </div>
+                <div class="flex flex-col space-y-2 w-1/3">
+                    <label>Status</label>
+                    <select name="status" id="" class="p-2 border rounded-sm mb-[30px]" >
+                    <option value="" disabled selected hidden>Odaberite status</option>
+                        <option value="cekanje">Na cekanju</option>
+                        <option value="izrada">U izradi</option>
+                        <option value="zavrsen">Zavrseno</option>
+                    </select>
+                    
+                    <label class="pt-5">Rok za izradu</label>
+                    <input type="date" value=<%= new Date(projekat.datumKraja).toISOString().split('T')[0] %> name="datumIsteka" class="p-2 border rounded-sm mb-[30px]" />
+
+                    <label class="pt-5">Radnici</label>
+
+                    <select id="choices" name="radnici" placeholder="Izaberite radnike" multiple
+                    class="p-2 border rounded-sm mb-[30px]">
+                    <%radnici.map((radnik) => {%>
+                        <option value=<%= radnik.username%> ><%= radnik.ime%> <%= radnik.prezime%>  </option>
+                        <%})%>
+                </select>
+
+                    
+                </div>
+            </div>
+            <textarea class="border w-2/3 mt-3 min-h-[200px] "name="opis" placeholder="Napisite zadatke projekta..."><%=projekat.opis%> </textarea>
+            <button  type="submit" class= "mt-5 bg-sky-600 py-3 px-10 rounded-md text-white uppercase font-medium tracking-widest"> DODAJ </button>
+            </form>
+        </div>     
+    </main> 
+
+
+    <script>
+        var radnici = '<%- JSON.stringify(projekat.radnici_info) %>'; // test is now a valid js object
+        var radniciInfo = JSON.parse(radnici);
+
+
+        var multipleCancelButton = new Choices('#choices', {
+           removeItemButton: true,
+
+        });
+
+        radniciInfo.forEach((radnik) =>
+            multipleCancelButton.setValue(radnik.username) 
+        )
+</script>
+    
+</body>
+</html>
