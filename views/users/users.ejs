@@ -1,24 +1,435 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Radnici</title>
+    <title>Evidencija - radnik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.css" />
+
+    <style>
+      /* Stiliziranje svih dana, uključujući danas */
+      /* Postavi veličinu kalendaru na 400x400px */
+      #calendar {
+        width: 100%;
+        height:fit-content; /* Omogući visinu kalendara da se prilagodi sadržaju */
+        max-height: 100%; /* Postavi maksimalnu visinu na 100% dostupnog prostora */
+      }
+  .fc-scroller {
+    overflow: unset !important;
+    height: fit-content !important;
+  }
+  /* Postavi svaki red na 100% širine i poravnaj tekst u sredinu */
+  .fc-ltr .fc-basic-view .fc-day-top .fc-day-number{
+    float:none;
+  }
+  .fc-row {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    text-align: center;
+  }
+  .fc .fc-row {
+    display: flex;
+    flex-wrap: wrap; /* Omogući prelazak u novi red kada je potrebno */
+    justify-content: space-around; /* Ravnomjerno rasporedi dane po širini kalendaru */
+  }
+  .fc-content-skeleton > .fc-unthemed > table > tbody{
+    display: none;
+  }
+  .fc-content-skeleton  table tbody tr {
+    display: none;
+  }
+  .fc .fc-row .fc-content-skeleton td  {
+    margin: 2px calc((100% - (30px*7))/14); /* Dodaj malo margine između dana */ 
+    
+  }
+  .fc-today .fc-day-number {
+    color: white;
+    background: rgb(2 132 199) !important;
+    
+  } 
+  .fc .fc-row .fc-content-skeleton td .fc-day-number  {
+    width: 20px;
+    height: 20px;
+    display: inline-block; /* Postavi na inline-block umjesto flexa */
+    text-align: center;
+    line-height: 20px; /* Postavi visinu linije na istu vrijednost kao visina i širina za centriranje teksta */
+    font-size: 12px;
+    margin: 0px calc((100% - (20px*7))/14); /* Dodaj malo margine između dana */
+  }
+  .oznaka {
+    margin-left: 2px; /* Dodaj malo margine između dana */
+  }
+  
+  .event-indicator{
+    font-size: 8px;
+    color: red;
+  }
+  /* Isključi bordere za dane */
+  #calendar td {
+    border: none;
+  }
+  #calendar > div.fc-toolbar.fc-header-toolbar > div.fc-right{
+    display: flex;
+    align-items: center;
+  }
+  #calendar > div.fc-toolbar.fc-header-toolbar > div.fc-right > div > button.fc-prev-button.fc-button.fc-state-default.fc-corner-left,
+  #calendar > div.fc-toolbar.fc-header-toolbar > div.fc-right > div > button.fc-next-button.fc-button.fc-state-default.fc-corner-right{
+    background: rgb(2 132 199);
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    font-size: 15px !important;
+    line-height: 20px; 
+    margin-right: 3px;
+    padding: 0;
+    color: white;
+    width: fit-content;
+  }
+  .fc button .fc-icon {
+    vertical-align: unset;
+    line-height: 20px;
+    font-size: 15px;
+  }
+  .fc-icon {
+    font-size: 15px;
+    line-height: 20px;
+  }
+  .fc-button, .fc-prev-button, .fc-next-button {
+    background: rgb(2 132 199);
+    opacity: 1;
+    height: fit-content;
+    padding: 0;
+    color: white;
+    width: fit-content;
+  }
+  
+  /* Postavi redove visoke samo koliko je potrebno za prikaz broja */
+  .fc-content-skeleton {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+  }
+  .fc-basic-view .fc-body .fc-row{
+    min-height: fit-content;
+    height: fit-content !important;
+  }
+  .fc-row .fc-week .fc-widget-content{
+    height: fit-content !important;
+  }
+  /* Postavi stupce na širinu koja je potrebna za lijep prikaz */
+  .fc-col {
+    flex-grow: 1;
+  }
+  
+  /* Stiliziraj dane */
+  .fc-day {
+    width: fit-content; /* Omogućite širinu samo onoliko koliko je potrebno za sadržaj */
+    padding: 5px; /* Dodajte malo prostora oko teksta */
+    border: 1px solid #ccc; /* Dodajte rub svakom danu */
+    background-color: #f8f8f8; /* Boja pozadine za sve dane */
+    color: #333; /* Boja teksta za sve dane */
+  }
+  
+  /* Stiliziraj naslove dana (ponedjeljak, utorak, ...) */
+  .fc-head {
+    font-size: 12px;
+    width: 100%; /* Podijeli širinu kalendaru s brojem dana u tjednu */
+    text-align: center;
+    line-height: 40px;
+    color: #333;
+    border: none;
+    display: flex;
+    margin: 0;
+    border: 0;
+  }
+  
+  </style>
+
+
+
 </head>
 <body>
-<main class="flex">
+  
+  <%- include("../partials/chat.ejs") %>
+
+
+    <main class="flex w-full">
+        <div class="w-0 sm:w-[15%] ">
+          <%- include("../partials/navAll.ejs") %>
+        </div>
+
+        <div class="w-full sm:w-[85%] mt-16">
+            <div class="border-b-2 uppercase p-4 text-xl tracking-widest">
+                <h1 class="pl-10">USER PANEL</h1>
+            </div>
+
+
+            <div class=" w-[95%] mx-auto sm:w-full flex-col sm:flex-row  flex items-start sm:pr-4">
+
+              <!--BROOJ PROJEKATA-->
+              <div class=" w-full sm:w-1/3 space-y-4 mt-3 sm:mt-6 sm:px-4 flex m-0 flex-col items-center justify-around sm:justify-normal">
+                <div class="w-full border-t-[6px] rounded-xl border-sky-600 bg-white shadow-lg p-3 h-fit">
+                    <h1 class="font-semibold text-xl text-sky-700 uppercase pb-3">
+                      <i class="fa fa-file"></i> ukupno projekata: <%=projekti[0] ? projekti[0].sviProjekti : 0 %></h1>
+                </div>
+
+                <!--DIJAGRAM ZADATAKAA-->
+                <div class="w-full border-t-[6px] rounded-xl border-sky-600 bg-white shadow-lg p-3 h-fit">
+                  <div class="flex flex-col font-semibold text-xl text-sky-700 uppercase pb-3">
+                    <h1 class=""> <i class="fa fa-tasks"></i> ukupno zadataka: <%=projekti[projekti.length-1] ? projekti[projekti.length-1].sviZadaci : 0%></h1>
+                  </div>
+                  <div class="h-[200px] relative">
+                    <canvas id="myPieChart" ></canvas>
+                  </div>
+
+                </div>
+            </div> 
+
+<div class=" w-full sm:w-1/3 space-y-4 mt-3 sm:mt-6 sm:px-4 flex m-0 flex-col items-center justify-around sm:justify-normal">
+  <div class="w-full border-t-[6px] rounded-xl border-sky-600 bg-white shadow-lg p-3 h-fit">
+      <h1 class="font-semibold text-xl text-sky-700 uppercase pb-3">
+        <i class="fa fa-file"></i> urgentni zadaci</h1>
+        <% 
+        let brojac = 0;
+        zadaci.map((zadatak) => {%>
+          <% 
+          let danas = new Date();
+           let razlika = zadatak.datumKraja - danas; 
+           let v = razlika /(1000*60*60)/24;         
+           if(v < 3 && zadatak.status !== 'zavrsen' ) { 
+            brojac++;
+           %>
+           <div class="<%= v < 0 ? 'bg-red-200' : 'bg-yellow-200' %>  flex flex-col space-y-1 border-b-2 pb-2 mb-2 rounded-md p-1 border-sky-600">
+            <div class="flex justify-between items-start">
+              <h1 class="uppercase"><%= zadatak.nazivZadatka %></h1>
+              <h1 class="uppercase opacity-60 text-sm"><%= zadatak.projekat.nazivProjekta %></h1>
+            </div>
+            
+            <div class="flex flex-col space-y-1">
+              <p class="truncate" ><%= zadatak.opisZadatka %></p>
+              <div class="flex justify-between">
+                <p class="text-xs font-semibold">Start:<%=new Date(zadatak.datumPocetka).toLocaleDateString() %> Kraj: <%= new Date(zadatak.datumKraja).toLocaleDateString()%> </p>
+                <p class="bg-green-500/20  py-1 px-2 text-xs rounded-md font-semibold <%= zadatak.status === 'cekanje' ? 'text-red-700' : zadatak.status === 'izrada' ? 'text-green-600' : zadatak.status === 'zavrsen' ? 'text-sky-700' : 'ostale-klase' %> uppercase  "><%= zadatak.status %></p>
+              </div>
+            </div>
+            </div>
+          <%
+        }%>
+        <%})%>
+
+      <%if(brojac<1) {%>
+        <h1 class="font-semibold uppercase py-3">Nemate urgentnih zadataka! </h1>
+      <%}%>
+  </div>
+
+</div> 
+
+              <!--KALENDAR-->
+              
+              <div class="hidden sm:flex w-full sm:w-1/3 border-t-8 mt-6 border-sky-600 rounded-xl shadow-2xl p-3">
+                  <div id="calendar"></div>
+                </div>
+
+
+              
+            </div>
+
+
+            <!--Tabela i desni prikaz za zadatke i projekte brojke -->
+            <div class="flex flex-col sm:flex-row p-3 sm:space-x-2">
+
+
+            <!--Statusna tabela o projektima-->
+
+            <div class="sm:mt-6 w-full overflow-x-scroll sm:w-8/12 sm:ml-4 sm:min-w-max table-auto text-left bg-white shadow-2xl border-t-8 rounded-xl border-sky-600">
+               <table class="w-full rounded-lg mt-2">
+                <thead>
+                  <tr class="py-2">
+                    <th class="cursor-pointer border-b border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                        <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Projekt
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-b border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Progres 
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-b border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70">Status 
+                      </p>
+                    </th>
+                    <th class="cursor-pointer border-b border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                      <p class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70"></p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                    <%projekti.map((projekatZasebno) => {%>
+                        <tr>
+                            <td class="p-4 border-b border-blue-gray-50">
+                              <div class="flex items-center gap-3">
+                                <div class="flex flex-col">
+                                  <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.projekat.nazivProjekta%> </p>
+                                  <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">Kraj: <%= new Date(projekatZasebno.projekat.datumKraja).toLocaleDateString()%></p>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="p-4 border-b border-blue-gray-50">
+                              <div class="flex items-center gap-3">
+                                <div class="flex flex-col">
+                                    <!--Progres ubacit-->
+                                    <div class="bg-gray-200 w-36 h-3 rounded-full">
+                                        <div class="bg-sky-600 h-3 rounded-full" style="width: <%= projekatZasebno.brojZadataka > 0 ? (projekatZasebno.uradjeniZadaci/projekatZasebno.brojZadataka)*100 : 0%>%;"></div>
+                                    </div>
+                                    <p class="text-xs font-semibold pt-2"><%= projekatZasebno.brojZadataka > 0 ? Math.round((projekatZasebno.uradjeniZadaci/projekatZasebno.brojZadataka)*100) : 0%>% Obavljeno</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="p-4 border-b border-blue-gray-50">
+                              <div class="flex items-center gap-3">
+                                 <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20  py-1 px-2 text-xs rounded-md" style="opacity: 1;">
+                                    <span class="<%= projekatZasebno.projekat.status === 'cekanje' ? 'text-red-700' : projekatZasebno.projekat.status === 'izrada' ? 'text-green-600' : projekatZasebno.projekat.status === 'zavrsen' ? 'text-sky-700' : 'ostale-klase' %>"> <%= projekatZasebno.projekat.status %> </span>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="p-4 border-b border-blue-gray-50">
+                              <div class="flex items-center gap-3">
+                                <div class="flex flex-col">
+                                  <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal bg-sky-600 p-2 rounded-md uppercase text-white ">
+                                    <a href=<%= "projectDetails/"+projekatZasebno.projekat._id %>> <i class="fa fa-folder-open	"></i> Detalji </a>
+                                    </p>
+                                </div>
+                              </div>
+                            </td>
+                        </tr>
+                    <%})%>
+                </tbody>
+            </table>
+            </div>
+            <!--Kraj statusne tabele-->
+
+
+
+            <!--Desni prikaz za zadatke i projekte brojke -->
+            <div class="sm:w-1/3 space-y-4 mt-6 px-4">
+                <div class="w-full border-t-[6px] rounded-xl border-sky-600 bg-white shadow-lg p-3 h-fit">
+                    <h1 class="font-semibold text-xl text-sky-700 uppercase pb-3">
+                      <i class="fa fa-file"></i> ukupno projekata: <%=projekti[0]? projekti[0].sviProjekti : 0 %></h1>
+                </div>
+
+                <div class="w-full border-t-[6px] rounded-xl border-sky-600 bg-white shadow-lg p-3 h-fit">
+                  <div class="flex flex-col font-semibold text-xl text-sky-700 uppercase pb-3">
+                    <h1 class=""> <i class="fa fa-tasks"></i> ukupno zadataka: <%=projekti[projekti.length-1] ? projekti[projekti.length-1].sviZadaci : 0 %></h1>
+                  </div>
+                  <div class="h-[200px] relative">
+                    <canvas id="myPieChart" ></canvas>
+                  </div>
+
+                </div>
+            </div>             <!--Kraj desni prikaz za zadatke i projekte brojke -->
+
+          </div> <!--Kraj tabele i desnog prikaza za zadatke i projekte brojke -->
+
+
+
+        </div>
+
+        </div>
         
-    <div class="w-[15%]">
-        <%- include("../partials/sidebarAdmin.ejs") %>
-    </div>
 
-    <div class="w-[85%]">
-        <%- include("../partials/navbar.ejs") %>
+            
+            
+    </main>
 
-    <h1>Radnici</h1>
-</div>
 
-</main>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.js"></script>
+    <script>
+      // Mapiranje podataka o projektima na format za Chart.js
+
+      
+      var zadaci = '<%- JSON.stringify(spisakZadataka) %>'; // test is now a valid js object
+      var spisakZadataka = JSON.parse(zadaci);
+      var data = {
+        labels: ['Na čekanju', 'U izradi', 'Završeno'],
+          datasets: [{
+              data: [spisakZadataka[0].uIzradiZadaci, spisakZadataka[0].naCekanjuZadaci, spisakZadataka[0].zavrseniZadaci],
+              backgroundColor: ['#99ccff','#ffcc00',  '#66ff66'],
+          }]
+      };
+
+      var options = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+                display: true,
+                position: 'left',
+            }
+        }
+
+      };
+
+
+      var ctx = document.getElementById('myPieChart').getContext('2d');
+
+      var myPieChart = new Chart(ctx, {
+          type: 'polarArea',
+          data: data,
+          options: options
+      });
+
+      $(document).ready(function () {
+      var tasks = <%- JSON.stringify(zadaci) %>; 
+
+      $('#calendar').fullCalendar({
+
+      header: {
+        left: 'title',
+        center: '',
+        end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+      },
+      
+      events: tasks.map(task => ({
+        title: task.opisZadatka,
+        start: task.datumPocetka,
+        allDay: true
+      })),
+      
+      dayRender: function(info) {
+
+      document.querySelectorAll('.fc-day-top').forEach(function(day, i) {
+        var hasEvents = tasks.some(task => new Date(task.datumPocetka).toISOString().split('T')[0] === day.getAttribute('data-date'));
+        if(hasEvents) {
+          let p = document.createElement('div')
+          let s = document.createElement('p')
+          s.innerHTML = ''
+          s.classList.add( 'bg-sky-500', 'w-[5px]', 'h-[5px]', 'rounded-full')
+          p.append(s)
+          p.classList.add( 'oznaka','flex', 'justify-center')
+          if(day.childNodes.length < 2) {
+            day.appendChild(p)
+          }
+        }
+      })}
+   
+   
+    });
+  })
+
+
+
+
+
+
+
+  </script>
 
 </body>
 </html>

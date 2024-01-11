@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evidencija - izvjestaj</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style id="table_style" type="text/css">
+        table
+        {
+            border: 1px solid #ccc; 
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        .statusniTekst{
+          text-transform: uppercase;
+        }
+        table th
+        {
+            background-color: #F7F7F7;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        table th, table td
+        {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+  <%- include("../partials/chat.ejs") %>
+
+    <main class="flex w-full">
+        <div class="w-0 sm:w-[15%]">
+            <%- include("../partials/navAll.ejs") %>
+        </div>
+
+        <!--desni div svi podaci -->
+        <div class="w-full sm:w-[85%] mt-16">
+            <div class="border-b-2 uppercase p-4 text-xl tracking-widest">
+                <h1 class="pl-10">ADMIN PANEL</h1>
+            </div>
+            <!--Div za izvjestaj projekata-->
+            <div  class=" p-2 sm:p-0 sm:w-10/12 overflow-x-scroll m-auto mt-6 shadow-xl">
+                <div class="flex items-center p-2 justify-between">
+                    <h1 class="uppercase font-semibold">Izvjestaj projekata</h1>
+                    <div class="flex space-x-2">
+
+                      <button id="print" class="bg-green-600 text-white p-3 rounded-md uppercase">Printaj</button>
+                      <form id="formaSlanjeMaila" action="">
+                        <button class="bg-green-600 text-white p-3 rounded-md uppercase">Posalji adminu</button>
+                      </form>
+                    </div>
+                </div>
+
+
+                    <table id="divZaPrintanje" class="w-full rounded-lg mt-2">
+                     <thead>
+                       <tr class="py-2">
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                             <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Projekt
+                           </p>
+                         </th>
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                           <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Ukupno zadataka 
+                           </p>
+                         </th>
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                           <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Zavrseni zadaci 
+                           </p>
+                         </th>
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                           <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Radni sati</p>
+                         </th>
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                           <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70"> Status</p>
+                         </th>
+                       </tr>
+                     </thead>
+                     <tbody>
+
+                         <%izvjestaj.map((projekatZasebno) => {%>
+                             <tr>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                     <div class="flex flex-col">
+                                       <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.projekat.nazivProjekta%> </p>
+                                       <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">Kraj: <%= new Date(projekatZasebno.projekat.datumKraja).toLocaleDateString()%></p>
+                                     </div>
+                                   </div>
+                                 </td>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                     <div class="flex flex-col">
+                                       <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.brojZadataka%> </p>
+                                     </div>
+                                   </div>
+                                 </td>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.uradjeniZadaci%> </p>
+                                   </div>
+                                 </td>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.radniSati%> h </p>
+                                   </div>
+                                 </td>
+                                 <td class=" statusniTekst p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                      <div class=" relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20  py-1 px-2 text-xs rounded-md" style="opacity: 1;">
+                                         <span class="<%= projekatZasebno.projekat.status === 'cekanje' ? 'text-red-700' : projekatZasebno.projekat.status === 'izrada' ? 'text-green-600' : projekatZasebno.projekat.status === 'zavrsen' ? 'text-sky-700' : 'ostale-klase' %> "> <%= projekatZasebno.projekat.status %> </span>
+                                     </div>
+                                   </div>
+                                 </td>
+                             </tr>
+                         <%})%>
+                     </tbody>
+                 </table>
+                 </div>
+
+                
+            <!--Div za izvjestaj projekata prema radnicima-->
+                 <div  class=" <%= admin ? 'block' : 'hidden'%> p-2 sm:p-0 sm:w-10/12 overflow-x-scroll m-auto mt-6 shadow-xl">
+                  <div class="flex items-center p-2 justify-between">
+                      <h1 class="uppercase font-semibold">Izvjestaj prema radnicima</h1>
+                      <button id="printRadnici" class="bg-green-600 text-white p-3 rounded-md uppercase">Printaj</button>
+                     
+
+                  </div>  
+                      <table id="divZaPrintanjeRadnici" class="w-full rounded-lg mt-2">
+                       <thead>
+                         <tr class="py-2">
+                           <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                               <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Ime
+                             </p>
+                           </th>
+                           <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                             <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Prezime 
+                             </p>
+                           </th>
+                           <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                             <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Pozicija 
+                             </p>
+                           </th>
+                           <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                             <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Radni sati</p>
+                           </th>
+                           <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                             <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70"> Broj projekata</p>
+                           </th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                           
+                           <%izvjestajSaRadnicima.map((projekatZasebno) => { 
+                            %>
+                            <tr>
+                              <td class="p-4 border-b border-blue-gray-50">
+                                <div class="flex items-center justify-center gap-3">
+                                  <div class="flex flex-col">
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.ime%> </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="p-4 border-b border-blue-gray-50">
+                                <div class="flex items-center justify-center gap-3">
+                                  <div class="flex flex-col">
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.prezime%> </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="p-4 border-b border-blue-gray-50">
+                                <div class="flex items-center justify-center gap-3">
+                                 <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.pozicija%> </p>
+                                </div>
+                              </td>
+                              <td class="p-4 border-b border-blue-gray-50">
+                                <div class="flex items-center justify-center gap-3">
+                                 <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.brojRadnihSati%> h </p>
+                                </div>
+                              </td>
+                              <td class="p-4 border-b border-blue-gray-50">
+                                <div class="flex items-center justify-center gap-3">
+                                 <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= projekatZasebno.brojProjekata%> </p>
+                                </div>
+                              </td>
+                          </tr>
+
+
+
+                           <%})%>
+                       </tbody>
+                   </table>
+                   </div>
+        </div>
+        <!-- kraj desni div svi podaci -->
+
+
+            
+            
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+    function printData(){
+        var divToPrint=document.getElementById("divZaPrintanje");
+        newWin= window.open("");
+        newWin.document.write('<html><head><title>Izvjestaj projekata - Evidencija projekata</title>');
+
+        var table_style = document.getElementById("table_style").innerHTML;
+        newWin.document.write('<style type = "text/css">');
+        newWin.document.write(table_style);
+        newWin.document.write('</style>');
+        newWin.document.write('</head>');
+
+
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+        }
+    document.getElementById("print").addEventListener('click',function(){
+        printData();
+    })
+    function printDataRadnici(){
+        var divToPrint=document.getElementById("divZaPrintanjeRadnici");
+        newWin= window.open("");
+        newWin.document.write('<html><head><title>Izvjestaj projekata - Evidencija projekata</title>');
+
+        var table_style = document.getElementById("table_style").innerHTML;
+        newWin.document.write('<style type = "text/css">');
+        newWin.document.write(table_style);
+        newWin.document.write('</style>');
+        newWin.document.write('</head>');
+
+
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+        }
+    document.getElementById("printRadnici").addEventListener('click',function(){
+        printDataRadnici();
+    })
+
+    function getTableHtml() {
+    var tabelaHtml = document.getElementById("divZaPrintanje").innerHTML;
+    return tabelaHtml;
+}
+
+  $('#formaSlanjeMaila').on('submit',(e) => {
+    var tabelaHtml = getTableHtml();
+    var table_style = document.getElementById("table_style").innerHTML;
+
+    $.ajax({
+        url: '/slanjeIzvjestajaAdminu',
+        type: 'POST',
+        data: { tabelaHtml: tabelaHtml, cssTabele: table_style },
+        success: function(response) {
+            console.log(response);
+            // Dodajte kod za dalje postupanje nakon uspešnog slanja izvještaja
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+})
+
+
+
+    </script>
+    
+</body>
+</html>

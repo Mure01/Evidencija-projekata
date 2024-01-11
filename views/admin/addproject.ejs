@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin</title>
+    <title>Evidencija - dodaj projekat</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
@@ -11,27 +13,24 @@
 
 </head>
 <body>
+    <%- include("../partials/chat.ejs") %>
 
 
     <main class="flex w-full">
         
-        <div class="w-[15%]">
-            <%- include("../partials/sidebarAdmin.ejs") %>
+        <div class="w-0 sm:w-[15%]">
+          <%- include("../partials/navAll.ejs") %>
         </div>
 
-        <div class="w-[85%]">
-        
-            <div>
-            <%- include("../partials/navbar.ejs") %>
-        </div>
+        <div class="w-full sm:w-[85%] mt-16">
         
         <h1 class="p-5 border-b-2 border-solid border-[#ddd] uppercase font-medium">Dodajte novi projekat</h1>
 
-            <form   action="/dodajProjekat" method="post" class="flex flex-col items-center" >
+            <form  id="formaProjekat" action="/dodajProjekat" method="post" class="flex flex-col items-center" >
             
-            <div class="flex flex-row space-x-6  w-full justify-center mt-5 relative">
+            <div class="flex flex-col px-3 sm:px-0 sm:flex-row sm:space-x-6  w-full justify-center mt-5 relative">
             
-            <div class="flex flex-col space-y-2 w-1/3">
+            <div class="flex flex-col space-y-2 sm:w-1/3">
 
                     <label>Naziv projekta</label>
                     <input required class="p-2 border rounded-sm mb-[30px]" name="nazivProjekta"  placeholder="Ime..." type="text"/>
@@ -40,7 +39,7 @@
                     <input required class="p-2 border rounded-sm mb-[30px]" name="pocetniDatum" placeholder="Prezime..." type="date"/>
                     
                     <label class="pt-5">Menadzer</label>
-                    <select required name="menadzer" class="p-2 border rounded-sm mb-[30px]">
+                    <select required id="menadzer" name="menadzer" class="p-2 border rounded-sm mb-[30px]">
                         <option value="" disabled selected hidden>Odaberite menadzera</option>
 
                         <% menadzeri.map((menadzer) => { %>
@@ -50,7 +49,7 @@
                 
                 
             </div>
-                <div class="flex flex-col space-y-2 w-1/3">
+                <div class="flex flex-col space-y-2 mt-4 sm:mt-0 sm:w-1/3">
                     <label>Status</label>
                     <select name="status" id="" class="p-2 border rounded-sm mb-[30px]" >
                     <option value="" disabled selected hidden>Odaberite status</option>
@@ -75,14 +74,19 @@
                     
                 </div>
             </div>
-            <textarea class="border w-2/3 mt-3 min-h-[200px] " name="opis" placeholder="Napisite zadatke projekta..."></textarea>
-            <button type="submit" class= "mt-5 bg-sky-600 py-3 px-10 rounded-md text-white uppercase font-medium tracking-widest"> DODAJ </button>
+            <textarea class="border w-[95%] mx-auto sm:mx-0 sm:w-2/3 mt-3 min-h-[200px] " name="opis" placeholder="Napisite opis projekta..."></textarea>
+            <button id="dodajProjekatDugme" type="submit" class= "mt-5 bg-sky-600 py-3 px-10 rounded-md text-white uppercase font-medium tracking-widest"> DODAJ </button>
 
             </form>
         </div>     
     </main> 
 
 
+    
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         
         $(document).ready(function(){
@@ -91,6 +95,18 @@
         }); 
     });
 
+    var posiljaocId = '<%= chatData.userId%>'
+    var posiljaocIme = '<%= chatData.ime%>'
+
+    $(document).ready(function() {
+    $('#formaProjekat').on('submit', function() {
+        let radnici = $('#choices').val()
+        let menadzer = $('#menadzer').val()
+        radnici.push(menadzer)
+
+        socket.emit('projekat', {radnici, posiljaocId, ime:posiljaocIme} );
+    });
+});
     </script>
     
 </body>

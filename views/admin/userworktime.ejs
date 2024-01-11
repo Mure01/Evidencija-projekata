@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evidencija - izvjestaj</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style id="table_style" type="text/css">
+        table
+        {
+            border: 1px solid #ccc; 
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        .statusniTekst{
+          text-transform: uppercase;
+        }
+        table th
+        {
+            background-color: #F7F7F7;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        table th, table td
+        {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+  <%- include("../partials/chat.ejs") %>
+
+    <main class="flex w-full">
+        <div class="w-0 sm:w-[15%]">
+            <%- include("../partials/navAll.ejs") %>
+        </div>
+
+        <!--desni div svi podaci -->
+        <div class="w-full sm:w-[85%] mt-16">
+            <div class="border-b-2 uppercase p-4 text-xl tracking-widest">
+                <h1 class="pl-10">ADMIN PANEL</h1>
+            </div>
+            <!--Div za izvjestaj projekata-->
+            <div  class=" p-2 sm:p-0 sm:w-10/12 overflow-x-scroll m-auto mt-6 shadow-xl">
+                <div class="flex items-center p-2 justify-between">
+                  
+                    <h1 class="uppercase font-semibold">Izvjestaj radnog vremena za radnika: <%= izvjestaj[0].ime %> <%=izvjestaj[0].prezime %> </h1>
+                    <button onclick="printData('<%=izvjestaj[0].ime%> <%=izvjestaj[0].prezime%>');" id="print" class="bg-green-600 text-white p-3 rounded-md uppercase">Printaj</button>
+                </div>
+
+
+                    <table id="divZaPrintanje" class="w-full rounded-lg mt-2">
+                      <thead>
+                       <tr class="py-2">
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                           <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Datum prisustva 
+                           </p>
+                         </th>
+                         <th class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50">
+                          <p class="antialiased justify-center font-sans text-sm text-blue-gray-900 flex items-center gap-2 font-normal leading-none opacity-70">Radno vrijeme 
+                          </p>
+                        </th>
+                       </tr>
+                     </thead>
+                     <tbody>
+
+                         <% 
+                         if(izvjestaj[0].datumPrisustva == 0){  %>
+                          <tr>
+                            <td colspan="2" class="p-4 border-b border-blue-gray-50">
+                             <div class="flex items-center justify-center gap-3">
+                              <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> Nema radnog vremena </p>
+                             </div>
+                           </td>
+
+                          </tr>
+                          <% }else{
+                         izvjestaj.map((radnik) => {%>
+                             <tr>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                  <div class="flex items-center justify-center gap-3">
+                                   <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= new Date(radnik.datumPrisustva).toLocaleDateString()  %> </p>
+                                  </div>
+                                </td>
+                                 <td class="p-4 border-b border-blue-gray-50">
+                                   <div class="flex items-center justify-center gap-3">
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"> <%= radnik.radniSati%> h <%= radnik.radneMinute%> min </p>
+                                   </div>
+                                 </td>
+                             </tr>
+                         <%})}%>
+                     </tbody>
+                 </table>
+                 </div>
+
+
+
+
+            
+            
+    </main>
+    <script>
+    function printData(ime){
+      console.log(ime)
+        var divToPrint=document.getElementById("divZaPrintanje");
+        newWin= window.open("");
+        newWin.document.write('<html><head><title>Izvjestaj radnog vremena - Evidencija projekata</title>');
+          newWin.document.write('<h2>Radni sati za radnika: ' + ime + '</h2>');
+
+        var table_style = document.getElementById("table_style").innerHTML;
+        newWin.document.write('<style type = "text/css">');
+        newWin.document.write(table_style);
+        newWin.document.write('</style>');
+        newWin.document.write('</head>');
+
+
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+        }
+
+
+    </script>
+    
+</body>
+</html>

@@ -6,18 +6,18 @@ var logger = require('morgan');
 const mongoose = require('./config');
 const session = require('express-session');
 const MongoDBSession = require('connect-mongodb-session')(session);
-
+const usersModel = require('./models/users')
 
 // routers for app
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var loginRouter = require('./routes/login');
+var dodajProjekat = require('./routes/projects');
+var dodajZadatak = require('./routes/tasks');
+var chatRouter = require('./routes/chat');
 var dodajRadnika = require('./controllers/userController');
-var dodajProjekat = require('./controllers/projectController');
-var dodajZadatak = require('./controllers/tasksController');
-
+var dodajAktivnost = require('./controllers/activityController');
 
 var app = express();
 
@@ -39,6 +39,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//Midleware fukncija za chat
+
+app.use(async (req, res, next) => {
+  const isUserLoggedIn = req.session.userId !== undefined;
+
+  if (isUserLoggedIn) {
+    const radnici = await usersModel.find();
+    const trenutniRadnik = await usersModel.findById(req.session.userId);
+    res.locals.chatData = {
+      radnici: radnici,
+      ime: req.session.userIme,
+      userId: req.session.userId,
+      imePrezime: trenutniRadnik.ime + " " + trenutniRadnik.prezime,
+      emailRadnika: trenutniRadnik.email,
+      username: req.session.username 
+
+    };
+  }
+  next();
+  });
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
@@ -46,6 +69,8 @@ app.use('/', loginRouter);
 app.use('/', dodajRadnika);
 app.use('/', dodajProjekat);
 app.use('/', dodajZadatak);
+app.use('/', dodajAktivnost);
+app.use('/', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

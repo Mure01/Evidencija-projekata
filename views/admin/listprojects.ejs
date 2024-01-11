@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin</title>
+    <title>Evidencija - projekti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
 </head>
 <body>
 
+  <%- include("../partials/chat.ejs") %>
 
     <main class="flex w-full">
-        <div class="w-[15%]">
-            <%- include("../partials/sidebarAdmin.ejs") %>
+        <div class="w-0 sm:w-[15%]">
+            <%- include("../partials/navAll.ejs") %>
         </div>
 
-        <div class="w-[85%]">
-            <%- include("../partials/navbar.ejs") %>
+        <div class="w-full sm:w-[85%] mt-16">
 
             <h1 class="pl-10 pt-10 uppercase border-solid border-b-2 border-cyan-800 pb-3 text-xl">lista projekata</h1>
          
             
             <!-- component -->
-<div class="p-6 px-0">
+<div class="p-6 px-0 overflow-x-scroll">
     <table class="mt-4 w-11/12 m-auto min-w-max table-auto text-left">
       <thead>
         <tr class="py-2">
@@ -50,7 +52,7 @@
         </tr>
       </thead>
       <tbody>
-        <%projekti.map((projekat) => {%>
+        <%projekti?.map((projekat) => {%>
 
         <tr>
           <td class="p-4 border-b border-blue-gray-50">
@@ -85,8 +87,8 @@
           </td>
           <td class="p-4 border-b border-blue-gray-50">
             <div class="w-max">
-              <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-1 px-2 text-xs rounded-md" style="opacity: 1;">
-                <span class=""> <%= projekat.status %> </span>
+              <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20  py-1 px-2 text-xs rounded-md" style="opacity: 1;">
+                <span class="<%= projekat.status === 'cekanje' ? 'text-red-700' : projekat.status === 'izrada' ? 'text-green-600' : projekat.status === 'zavrsen' ? 'text-sky-700' : 'ostale-klase' %>"> <%= projekat.status %> </span>
               </div>
             </div>
           </td>

@@ -1,0 +1,259 @@
+<nav class="fixed top-0 h-16 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="px-1 sm:px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button id="aside" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+              <span class="sr-only">Open sidebar</span>
+              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+              </svg>
+           </button>
+            <a href="/" class="flex ms-2 md:me-24">
+            <img src="/images/presentation_8258254.png" class="h-8 me-1 sm:me-3" alt="Logo" />
+            <span class="self-center text-lg font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Evidencija projekata</span>
+          </a>
+
+        </div>
+        <div class="flex items-center">
+            <div class="flex items-center ms-3">
+               
+               <div class="relative mr-3">
+                <i class="fa fa-bell cursor-pointer text-lg sm:text-2xl  text-gray-900 dark:text-white" id="notificationOpen"></i>
+                <span class="absolute bg-red-500 text-white text-xs w-4 h-4 text-center left-0 rounded-full h" id="brojObavjesti">0</span>
+               </div>
+               
+               <div>
+                <i class="fa fa-wechat cursor-pointer text-lg sm:text-2xl mr-3 text-gray-900 dark:text-white" id="chatOpen"></i>
+               </div>
+
+              <div>
+                <button id="userPostavke" type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="w-8 h-8 rounded-full" src="/images/profile_3135715.png">
+                </button>
+              </div>
+              <div id="userPostavkeLista" class="z-50 hidden absolute right-2 top-16 text-base
+               list-none bg-white divide-y divide-gray-100 rounded-b-xl shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                <div class="px-4 py-3" role="none">
+                  <p class="text-sm text-gray-900 dark:text-white" role="none">
+                    <%= chatData.imePrezime%>
+                  </p>
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                    <%= chatData.emailRadnika%>
+                  </p>
+                </div>
+                <ul class="py-1" role="none">
+                  <li>
+                    <a href="<%= admin ? '/admin' : '/users' %>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
+                  </li>
+                  <li>
+                    <form action="/logout" method="post" class="block border-t-[1px] px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
+                    dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                        <button class=" px-3 py-1 rounded-md text-red-500 " type="submit"><i class="fa fa-sign-out"></i> Odjava</button>
+                     </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!--sidebar-->
+
+  <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-fit sm:w-[15%] h-screen pt-20 transition-transform -translate-x-full
+   bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <ul class="space-y-2 font-medium">
+           <li>
+              <a href="<%= admin ? '/admin' : '/users' %>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                 <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                 </svg>
+                 <span class="ms-3">Dashboard</span>
+              </a>
+           </li>
+
+           <%if(!admin) {%>
+            <li>
+                <a href="/listaProjekataZaRadnika" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <svg fill="currentColor"
+                    class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="122.88px" height="93.63px" viewBox="0 0 122.88 93.63" style="enable-background:new 0 0 122.88 93.63;" xml:space="preserve">
+                        <g>
+                            <path class="st0" d="M115.64,35.41l3,3c0.79,0.79,0.79,2.08,0,2.87l-2.42,2.42c0.67,1.24,1.17,2.59,1.5,4h3.13   c1.12,0,2.03,0.91,2.03,2.03v4.24c0,1.12-0.91,2.03-2.03,2.03h-3.42c-0.42,1.38-1.02,2.69-1.77,3.88l2.22,2.21   c0.79,0.79,0.79,2.08,0,2.87l-3,3c-0.79,0.79-2.08,0.79-2.87,0l-2.42-2.42c-1.24,0.67-2.58,1.18-4,1.5v3.13   c0,1.12-0.91,2.03-2.03,2.03h-4.24c-1.12,0-2.03-0.91-2.03-2.03v-3.42c-1.38-0.42-2.69-1.02-3.88-1.77l-2.21,2.22   c-0.79,0.79-2.08,0.79-2.87,0l-3-3c-0.79-0.79-0.79-2.08,0-2.87l2.42-2.42c-0.67-1.24-1.18-2.59-1.5-4h-3.13   c-1.12,0-2.03-0.91-2.03-2.03v-4.24c0-1.12,0.91-2.03,2.03-2.03h3.42c0.42-1.38,1.02-2.69,1.77-3.88l-2.21-2.21   c-0.79-0.79-0.79-2.08,0-2.87l3-3c0.79-0.79,2.08-0.79,2.87,0l2.42,2.42c1.24-0.67,2.59-1.18,4-1.5v-3.13   c0-1.12,0.91-2.03,2.03-2.03h4.24c1.12,0,2.03,0.91,2.03,2.03v3.41c1.38,0.42,2.69,1.02,3.88,1.77l2.21-2.21   C113.56,34.62,114.85,34.62,115.64,35.41L115.64,35.41L115.64,35.41z M3.5,70.32c2.93-3.08,4.12-3.47,8.06-4.19   c0-21.21,0-41.9,0-63.1c-9.2,0.9-8.13,9.41-8.08,17.32c0.01,1.06,0.02,1.62,0.02,1.88V70.32L3.5,70.32z M29.17,26.62h16.4h1.27   v1.27v51.22v1.27h-1.27h-16.4H27.9v-1.27V27.89v-1.27H29.17L29.17,26.62L29.17,26.62z M32.48,72.19h3.41v1.78h-3.41V72.19   L32.48,72.19L32.48,72.19z M32.48,67.23h3.41v1.78h-3.41V67.23L32.48,67.23L32.48,67.23z M32.48,62.21h3.41v1.78h-3.41V62.21   L32.48,62.21L32.48,62.21z M32.48,57.2h5.66v1.78h-5.66V57.2L32.48,57.2L32.48,57.2z M32.48,52.19h3.41v1.78h-3.41V52.19   L32.48,52.19L32.48,52.19z M32.48,47.17h3.41v1.78h-3.41V47.17L32.48,47.17L32.48,47.17z M32.48,42.16h3.41v1.78h-3.41V42.16   L32.48,42.16L32.48,42.16z M32.48,37.15h3.41v1.78h-3.41V37.15L32.48,37.15L32.48,37.15z M32.48,32.18h5.66v1.78h-5.66V32.18   L32.48,32.18L32.48,32.18z M44.29,29.15H30.44v48.68h13.85V29.15L44.29,29.15L44.29,29.15z M70.49,38.22v41.8h-11.7v-41.8h-0.05   l0.4-0.81l4.83-9.93l0.49-1.01l0.51,1l5.15,9.93l0.43,0.83H70.49L70.49,38.22L70.49,38.22z M60.55,37.08h8.15l-3.24-6.24h-1.87   L60.55,37.08L60.55,37.08L60.55,37.08z M15.02,12.09h86.23c0.67,0,1.27,0.27,1.7,0.71c0.44,0.44,0.71,1.04,0.71,1.7v6.99h-4.47   v-5.45H15.02v51.82h-0.01c0,0.72-0.52,1.34-1.25,1.45c-13.14,2.03-13.72,17.6-0.39,19.83h85.82v-6.54h4.47v8.6   c0,0.66-0.27,1.26-0.71,1.7l-0.01,0.01l0,0c-0.44,0.44-1.04,0.71-1.7,0.71H13.27c-3.6,0-8.6-2.82-10.68-5.8   c-2.04-2.9-2.77-6.63-2.56-10.97V22.23c0-1.51,0-1.67,0-1.87C-0.03,10.69-0.1,0.24,13.37,0.01C13.43,0,13.48,0,13.54,0   c0.82,0,1.48,0.66,1.48,1.48V12.09L15.02,12.09L15.02,12.09z M101.98,42.97c4.61,0,8.34,3.74,8.34,8.34s-3.74,8.34-8.34,8.34   c-4.61,0-8.34-3.74-8.34-8.34S97.37,42.97,101.98,42.97L101.98,42.97L101.98,42.97z"/>
+                        </g>
+                        </svg>
+                   <span class="ms-3">Projekti</span>
+                </a>
+             </li>
+             <%} else {%>
+
+           <li>
+            <button id="projects" type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                <svg fill="currentColor"
+                class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="122.88px" height="93.63px" viewBox="0 0 122.88 93.63" style="enable-background:new 0 0 122.88 93.63;" xml:space="preserve">
+                    <g>
+                        <path class="st0" d="M115.64,35.41l3,3c0.79,0.79,0.79,2.08,0,2.87l-2.42,2.42c0.67,1.24,1.17,2.59,1.5,4h3.13   c1.12,0,2.03,0.91,2.03,2.03v4.24c0,1.12-0.91,2.03-2.03,2.03h-3.42c-0.42,1.38-1.02,2.69-1.77,3.88l2.22,2.21   c0.79,0.79,0.79,2.08,0,2.87l-3,3c-0.79,0.79-2.08,0.79-2.87,0l-2.42-2.42c-1.24,0.67-2.58,1.18-4,1.5v3.13   c0,1.12-0.91,2.03-2.03,2.03h-4.24c-1.12,0-2.03-0.91-2.03-2.03v-3.42c-1.38-0.42-2.69-1.02-3.88-1.77l-2.21,2.22   c-0.79,0.79-2.08,0.79-2.87,0l-3-3c-0.79-0.79-0.79-2.08,0-2.87l2.42-2.42c-0.67-1.24-1.18-2.59-1.5-4h-3.13   c-1.12,0-2.03-0.91-2.03-2.03v-4.24c0-1.12,0.91-2.03,2.03-2.03h3.42c0.42-1.38,1.02-2.69,1.77-3.88l-2.21-2.21   c-0.79-0.79-0.79-2.08,0-2.87l3-3c0.79-0.79,2.08-0.79,2.87,0l2.42,2.42c1.24-0.67,2.59-1.18,4-1.5v-3.13   c0-1.12,0.91-2.03,2.03-2.03h4.24c1.12,0,2.03,0.91,2.03,2.03v3.41c1.38,0.42,2.69,1.02,3.88,1.77l2.21-2.21   C113.56,34.62,114.85,34.62,115.64,35.41L115.64,35.41L115.64,35.41z M3.5,70.32c2.93-3.08,4.12-3.47,8.06-4.19   c0-21.21,0-41.9,0-63.1c-9.2,0.9-8.13,9.41-8.08,17.32c0.01,1.06,0.02,1.62,0.02,1.88V70.32L3.5,70.32z M29.17,26.62h16.4h1.27   v1.27v51.22v1.27h-1.27h-16.4H27.9v-1.27V27.89v-1.27H29.17L29.17,26.62L29.17,26.62z M32.48,72.19h3.41v1.78h-3.41V72.19   L32.48,72.19L32.48,72.19z M32.48,67.23h3.41v1.78h-3.41V67.23L32.48,67.23L32.48,67.23z M32.48,62.21h3.41v1.78h-3.41V62.21   L32.48,62.21L32.48,62.21z M32.48,57.2h5.66v1.78h-5.66V57.2L32.48,57.2L32.48,57.2z M32.48,52.19h3.41v1.78h-3.41V52.19   L32.48,52.19L32.48,52.19z M32.48,47.17h3.41v1.78h-3.41V47.17L32.48,47.17L32.48,47.17z M32.48,42.16h3.41v1.78h-3.41V42.16   L32.48,42.16L32.48,42.16z M32.48,37.15h3.41v1.78h-3.41V37.15L32.48,37.15L32.48,37.15z M32.48,32.18h5.66v1.78h-5.66V32.18   L32.48,32.18L32.48,32.18z M44.29,29.15H30.44v48.68h13.85V29.15L44.29,29.15L44.29,29.15z M70.49,38.22v41.8h-11.7v-41.8h-0.05   l0.4-0.81l4.83-9.93l0.49-1.01l0.51,1l5.15,9.93l0.43,0.83H70.49L70.49,38.22L70.49,38.22z M60.55,37.08h8.15l-3.24-6.24h-1.87   L60.55,37.08L60.55,37.08L60.55,37.08z M15.02,12.09h86.23c0.67,0,1.27,0.27,1.7,0.71c0.44,0.44,0.71,1.04,0.71,1.7v6.99h-4.47   v-5.45H15.02v51.82h-0.01c0,0.72-0.52,1.34-1.25,1.45c-13.14,2.03-13.72,17.6-0.39,19.83h85.82v-6.54h4.47v8.6   c0,0.66-0.27,1.26-0.71,1.7l-0.01,0.01l0,0c-0.44,0.44-1.04,0.71-1.7,0.71H13.27c-3.6,0-8.6-2.82-10.68-5.8   c-2.04-2.9-2.77-6.63-2.56-10.97V22.23c0-1.51,0-1.67,0-1.87C-0.03,10.69-0.1,0.24,13.37,0.01C13.43,0,13.48,0,13.54,0   c0.82,0,1.48,0.66,1.48,1.48V12.09L15.02,12.09L15.02,12.09z M101.98,42.97c4.61,0,8.34,3.74,8.34,8.34s-3.74,8.34-8.34,8.34   c-4.61,0-8.34-3.74-8.34-8.34S97.37,42.97,101.98,42.97L101.98,42.97L101.98,42.97z"/>
+                    </g>
+                    </svg>
+                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Projekti</span>
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                  </svg>
+            </button>
+            <ul id="addproject" class="hidden flex-col py-2 space-y-2">
+                  <li>
+                     <a href="/admin/addproject" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <svg fill="currentColor" 
+                        class="w-5 mr-2 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 426 511.48"><path d="M104.07 355.71c12.54 0 22.7 10.17 22.7 22.7 0 12.55-10.18 22.7-22.7 22.7-12.55 0-22.71-10.17-22.71-22.7s10.18-22.7 22.71-22.7zm234.28-19.52c48.4 0 87.65 39.25 87.65 87.65 0 48.39-39.25 87.64-87.65 87.64-48.39 0-87.64-39.25-87.64-87.64 0-48.4 39.25-87.65 87.64-87.65zm46.15 78.76v17.76c0 3.63-2.95 6.59-6.59 6.59h-24.09v24.1a6.615 6.615 0 0 1-6.59 6.59h-17.76a6.607 6.607 0 0 1-6.58-6.59v-24.1h-24.11a6.592 6.592 0 0 1-6.57-6.59v-17.76c.01-3.62 2.95-6.57 6.57-6.58h24.11v-24.1c.01-3.63 2.96-6.56 6.58-6.58h17.76c3.63 0 6.58 2.94 6.59 6.58v24.1h24.09c3.64.01 6.57 2.95 6.59 6.58zM27.95 481.46C12.64 481.46 0 468.81 0 453.51V96.08c0-15.39 12.61-27.99 28-27.99h45.05v-8.81c0-10.3 8.51-18.75 18.8-18.75h30.57V20.79C122.42 9.45 131.75 0 143.11 0H250.4c11.43 0 20.78 9.38 20.78 20.79v19.79h26.35c10.3 0 18.79 8.56 18.79 18.85v8.8h45.06c15.34 0 27.99 12.59 27.99 27.94v220.8c-7.35-3.53-15.11-6.31-23.2-8.28V94.11c0-1.62-1.21-2.82-2.82-2.82l-47.03-.01v15.32c0 10.28-8.57 18.75-18.84 18.75H91.8c-10.3 0-18.75-8.51-18.75-18.79V91.23H25.98c-1.55 0-2.83 1.29-2.83 2.83v361.32c0 1.56 1.31 2.88 2.88 2.88l199 .05c2.48 8.1 5.79 15.83 9.85 23.1-96.13-.01-206.93-.01-206.93.05zm236.29-417.9c-7.92 0-16.63-4.18-16.63-13.2V23.23H145.92v27.13c0 8.35-7.93 13.2-15.57 13.2H97.01v40.58h195.35V63.56h-28.12zm-81.36 250.69H114.2v26.89H93.93v-37c0-5.6 4.54-10.14 10.14-10.14h78.25l-.33-31.37c-4.03-1.19-8.12-2.77-11.74-4.91l-6.3 6.94c-2.31 2.38-6.19 2.52-8.67.32l-9.25-8.66c-2.43-2.4-2.82-6.05-.35-8.57l6.92-7.47c-2.19-3.82-3.76-7.57-4.98-11.81l-9.24.38c-3.37.12-6.23-2.5-6.36-5.86l-.49-12.68c-.13-3.45 2.39-6.23 5.86-6.36l10.09-.39c1.16-4.05 2.76-8.17 4.91-11.81l-6.83-6.29c-2.54-2.37-2.71-6.13-.35-8.69l8.5-9.24c2.41-2.45 6.03-2.81 8.57-.36l7.6 6.9c3.77-2.25 7.41-3.76 11.64-4.98l-.38-9.24c-.12-3.37 2.51-6.23 5.86-6.36l12.68-.48c3.45-.12 6.23 2.4 6.36 5.87l.39 10.09c4.1 1.21 8.05 2.73 11.74 4.91l6.29-6.81c2.37-2.54 6.14-2.71 8.7-.35l.12.1 9.25 8.5c2.44 2.41 2.81 6.03.35 8.57l-6.9 7.6c2.2 3.82 3.73 7.45 4.98 11.68l9.25-.37c3.36-.13 6.22 2.5 6.35 5.86l.5 12.67c.12 3.45-2.39 6.24-5.86 6.36l-10.1.39c-1.19 4.03-2.77 8.12-4.91 11.75l6.93 6.29c2.45 2.35 2.49 6.11.33 8.67l-8.67 9.27c-2.23 2.53-6.13 2.7-8.56.35l-7.47-6.92c-3.82 2.19-7.58 3.76-11.81 4.97l.31 31.5h78.06c5.6 0 10.14 4.54 10.14 10.14v9.34c-7.12 2.78-13.9 6.23-20.27 10.27v-9.46h-67.99v26.89h-24.31v-26.89zm20.14-121.81c9.48 3.69 15.67 12.14 16.1 22.33.42 10.11-5.17 19.19-14.26 23.55-9.14 4.38-20.09 2.54-27.56-4.21-7.4-6.88-9.94-17.67-6.39-27.12 1.78-4.58 4.68-8.4 8.34-11.16 6.75-5.08 15.88-6.35 23.77-3.39zm-8.75 163.27c12.55 0 22.7 10.17 22.7 22.7 0 12.55-10.17 22.7-22.7 22.7-12.55 0-22.71-10.17-22.71-22.7s10.16-22.7 22.71-22.7z"/></svg>
+                        Dodaj projekat</a>
+                  </li>
+                  <li>
+                     <a href="/listaProjekata" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <svg fill="currentColor"
+                        class="w-5 mr-2 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 114.5 122.9" style="enable-background:new 0 0 114.5 122.9" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M105.4,76.3l3.8,3.8c1,1,1,2.6,0,3.6l-3.1,3.1c0.8,1.6,1.5,3.3,1.9,5.1h4c1.4,0,2.6,1.2,2.6,2.6v5.4 c0,1.4-1.2,2.6-2.6,2.6h-4.3c-0.5,1.7-1.3,3.4-2.2,4.9l2.8,2.8c1,1,1,2.6,0,3.6l-3.8,3.8c-1,1-2.6,1-3.6,0l-3.1-3.1 c-1.6,0.8-3.3,1.5-5.1,1.9v4c0,1.4-1.2,2.6-2.6,2.6h-5.4c-1.4,0-2.6-1.2-2.6-2.6V116c-1.7-0.5-3.4-1.3-4.9-2.2l-2.8,2.8 c-1,1-2.6,1-3.6,0l-3.8-3.8c-1-1-1-2.6,0-3.6l3.1-3.1c-0.8-1.6-1.5-3.3-1.9-5.1h-4c-1.4,0-2.6-1.2-2.6-2.6v-5.4 c0-1.4,1.2-2.6,2.6-2.6h4.3c0.5-1.7,1.3-3.4,2.2-4.9L68,82.8c-1-1-1-2.6,0-3.6l3.8-3.8c1-1,2.6-1,3.6,0l3.1,3.1 c1.6-0.8,3.3-1.5,5.1-1.9v-4c0-1.4,1.2-2.6,2.6-2.6h5.4c1.4,0,2.6,1.2,2.6,2.6v4.3c1.7,0.5,3.4,1.3,4.9,2.2l2.8-2.8 C102.7,75.3,104.4,75.3,105.4,76.3L105.4,76.3L105.4,76.3z M41.4,82.2c-1.4,0-2.5-1.4-2.5-3c0-1.7,1.1-3,2.5-3h12.4 c1.4,0,2.5,1.4,2.5,3c0,1.7-1.1,3-2.5,3H41.4L41.4,82.2L41.4,82.2z M45.1,112.3c1.7,0,3,1.4,3,3c0,1.7-1.4,3-3,3h-38 c-1.9,0-3.7-0.8-5-2.1c-1.3-1.3-2.1-3-2.1-5V7.1c0-2,0.8-3.7,2.1-5c1.3-1.3,3-2.1,5-2.1h86.7c1.9,0,3.7,0.8,5,2.1 c1.3,1.3,2.1,3,2.1,5v48.3c0,1.7-1.4,3-3,3c-1.7,0-3-1.4-3-3V7.1c0-0.3-0.1-0.5-0.3-0.7c-0.2-0.2-0.4-0.3-0.7-0.3H7.1 c-0.3,0-0.5,0.1-0.7,0.3C6.2,6.5,6.1,6.8,6.1,7.1v104.3c0,0.3,0.1,0.5,0.3,0.7c0.2,0.2,0.4,0.3,0.7,0.3H45.1L45.1,112.3L45.1,112.3 z M18.8,74.1h10.7c0.6,0,1,0.4,1,1v9.2c0,0.6-0.4,1-1,1H18.8c-0.6,0-1-0.4-1-1v-9.2C17.8,74.5,18.2,74.1,18.8,74.1L18.8,74.1 L18.8,74.1z M18.8,21.2h10.7c0.6,0,1,0.4,1,1v9.2c0,0.6-0.4,1-1,1H18.8c-0.6,0-1-0.4-1-1v-9.2C17.8,21.6,18.2,21.2,18.8,21.2 L18.8,21.2L18.8,21.2z M41.4,29.3c-1.4,0-2.5-1.4-2.5-3c0-1.7,1.1-3,2.5-3h34.7c1.4,0,2.5,1.4,2.5,3c0,1.7-1.1,3-2.5,3H41.4 L41.4,29.3L41.4,29.3z M21.9,57.4c-0.7,0.5-1.6,0.4-2.3-0.3c-0.1-0.1-0.1-0.1-0.2-0.2l-3.2-3.3c-0.7-0.7-0.5-1.8,0.3-2.6 c0.9-0.7,2.1-0.8,2.8-0.1l1.7,1.8l5.6-4.5c0.7-0.6,1.9-0.3,2.5,0.6c0.7,0.9,0.6,2.2-0.2,2.8L21.9,57.4L21.9,57.4L21.9,57.4z M39.7,54.8c-1.4,0-2.5-1.4-2.5-3c0-1.7,1.1-3,2.5-3h34.7c1.4,0,2.5,1.4,2.5,3c0,1.7-1.1,3-2.5,3H39.7L39.7,54.8L39.7,54.8z M88.1,85.9c5.8,0,10.6,4.7,10.6,10.6c0,5.8-4.7,10.6-10.6,10.6c-5.8,0-10.6-4.7-10.6-10.6C77.5,90.6,82.3,85.9,88.1,85.9 L88.1,85.9L88.1,85.9z"/></g></svg>
+                        Pregled projekata</a>
+                  </li>
+            </ul>
+         </li>
+         <%}%>
+
+           <li>
+              <a href="<%= admin ? '/listTasks' : '/listTasksRadnik' %>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                    <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+                 </svg>
+                
+                 <span class="flex-1 ms-3 whitespace-nowrap">Zadaci</span>
+              </a>
+           </li>
+           <li>
+              <a href="/admin/reports" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+                 </svg>
+                 <span class="flex-1 ms-3 whitespace-nowrap">Izvjestaj</span>
+              </a>
+           </li>
+
+           <%if(admin) {%>    
+
+           <li>
+            <button id="users" type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 113.25 122.88" fill="currentColor" xml:space="preserve">
+                    <g>
+                        <path class="st0" d="M77.59,78.72h27.16c4.67,0,8.5,3.82,8.5,8.5v27.17c0,4.67-3.82,8.49-8.5,8.49H77.59c-4.67,0-8.5-3.82-8.5-8.49   V87.22C69.1,82.55,72.92,78.72,77.59,78.72L77.59,78.72z M60.73,113.25c1.76,0,3.18,1.42,3.18,3.18c0,1.76-1.42,3.18-3.18,3.18   H7.39c-2.04,0-3.88-0.83-5.23-2.17C0.83,116.09,0,114.25,0,112.21V7.39c0-2.04,0.83-3.88,2.17-5.23C3.51,0.83,5.36,0,7.39,0h90.81   c2.04,0,3.88,0.84,5.22,2.17c1.34,1.34,2.17,3.19,2.17,5.23v61.23c0,1.76-1.42,3.18-3.18,3.18c-1.75,0-3.18-1.42-3.18-3.18V7.39   c0-0.28-0.12-0.54-0.31-0.73c-0.19-0.19-0.45-0.31-0.72-0.31H7.39c-0.28,0-0.54,0.12-0.74,0.3c-0.18,0.2-0.3,0.45-0.3,0.74v104.8   c0,0.28,0.12,0.54,0.31,0.73c0.19,0.19,0.45,0.31,0.74,0.31L60.73,113.25L60.73,113.25L60.73,113.25z M33.04,56.37   c-0.6-1.04-0.17-4.02,1.13-5.07c3.7-2.16,8.8-1.49,12.36-3.98c0.21-0.31,0.43-0.76,0.65-1.25c0.32-0.74,0.62-1.55,0.81-2.1   c-0.79-0.93-1.47-1.98-2.12-3.02l-2.14-3.41c-0.78-1.17-1.19-2.24-1.21-3.11c-0.01-0.41,0.06-0.78,0.21-1.12   c0.16-0.35,0.4-0.63,0.74-0.86c0.16-0.11,0.33-0.2,0.52-0.26c-0.14-1.85-0.19-4.18-0.1-6.13c0.04-0.46,0.14-0.93,0.26-1.39   c0.55-1.96,1.92-3.53,3.62-4.61c0.94-0.6,1.96-1.05,3.03-1.35c0.68-0.2-0.58-2.37,0.12-2.44c3.4-0.35,8.91,2.76,11.28,5.33   c1.19,1.29,1.94,2.99,2.1,5.25l-0.13,5.56l0,0c0.59,0.18,0.97,0.56,1.13,1.17c0.17,0.68-0.01,1.63-0.59,2.93l0,0   c-0.01,0.02-0.02,0.05-0.04,0.07l-2.44,4.02c-0.9,1.48-1.81,2.96-2.99,4.13c0.11,0.16,0.22,0.31,0.33,0.47   c0.48,0.71,0.97,1.42,1.6,2.05c0.02,0.02,0.04,0.04,0.05,0.07c2.81,1.99,9.65,2.47,12.28,3.93l0.11,0.06   c1.35,1.04,1.77,4.02,1.15,5.06H33.04L33.04,56.37z M30.89,92.81c-1.75,0-3.19-1.44-3.19-3.22c0-1.77,1.42-3.22,3.19-3.22h21.62   c1.76,0,3.19,1.44,3.19,3.22c0,1.78-1.42,3.22-3.19,3.22H30.89L30.89,92.81L30.89,92.81z M30.89,72.68c-1.75,0-3.18-1.42-3.18-3.18   c0-1.75,1.42-3.18,3.18-3.18h42.87c1.76,0,3.18,1.42,3.18,3.18c0,1.76-1.42,3.18-3.18,3.18H30.89L30.89,72.68L30.89,72.68z    M88.41,90.82c0-1.53,1.24-2.77,2.77-2.77s2.77,1.24,2.77,2.77v7.21h7.21c1.53,0,2.77,1.24,2.77,2.77s-1.24,2.77-2.77,2.77h-7.21   v7.21c0,1.53-1.24,2.77-2.77,2.77s-2.77-1.24-2.77-2.77v-7.21h-7.22c-1.53,0-2.77-1.24-2.77-2.77s1.24-2.77,2.77-2.77h7.21   L88.41,90.82L88.41,90.82L88.41,90.82z"/>
+                    </g>
+                    </svg>
+                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Zaposlenici</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+          </button>
+          <ul id="adduser" class="hidden flex-col py-2 space-y-2">
+                <li>
+                   <a href="/admin/adduser" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                    <svg class="flex-shrink-0 w-5 h-5 mr-2 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    fill="currentColor"  xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 469.87"><path fill-rule="nonzero" d="M232.21 0c31.37 0 61.4 6.28 88.81 17.64l.91.41c28.03 11.76 53.26 28.86 74.38 49.99 21.48 21.5 38.73 47.06 50.47 75.38 11.36 27.41 17.64 57.44 17.64 88.79 0 7.72-.38 15.35-1.13 22.88a124.045 124.045 0 0 0-34-10.09c.27-4.23.41-8.49.41-12.79 0-26.81-5.3-52.32-14.92-75.51a197.87 197.87 0 0 0-42.87-64.13C353.86 74.5 332.4 59.95 308.6 49.96l-.86-.33c-23.19-9.61-48.7-14.92-75.53-14.92s-52.34 5.31-75.53 14.92c-24.2 9.99-45.92 24.67-64.11 42.88-18.07 18.05-32.62 39.5-42.61 63.3l-.33.87c-9.61 23.19-14.92 48.7-14.92 75.53s5.31 52.34 14.92 75.53a196.342 196.342 0 0 0 23.46 41.56c19.5-13.07 70.39-20.77 91.17-27.36 20.35-6.45 22.32-8.02 28.05-25.05-7.36-6.28-14.46-16.1-15.64-29.07l-.97.02c-2.24-.03-4.39-.54-6.41-1.69-3.23-1.84-5.5-4.99-7.04-8.55-5.17-10.24-11.26-34.95 2.36-32.71l-1.7-3.19c-.32-3.96-.4-8.73-.48-13.76-.29-18.46-.67-40.83-15.51-45.31l-6.37-1.92c32.21-39.95 90.6-97.95 137.49-40.86 47.34 4.6 62.44 75.67 29.97 107.04 1.94.07 3.78.53 5.41 1.4 6.18 3.31 6.38 10.49 4.75 16.53-1.6 5.04-3.64 10.88-5.57 15.79-2.34 6.64-5.76 7.87-12.38 7.15-.29 14.34-9.61 21.19-18.75 29.13 6.67 9.59 9.34 14.34 16.24 18.61-7.65 16.2-11.92 34.27-11.92 53.36 0 30.56 10.96 58.58 29.17 80.32-25.75 9.84-53.68 15.24-82.75 15.24-31.35 0-61.39-6.28-88.81-17.64l-.91-.41c-28.03-11.76-53.26-28.86-74.39-50-21.43-21.42-38.67-46.97-50.44-75.36C6.28 293.61 0 263.58 0 232.21c0-31.38 6.28-61.41 17.64-88.81l.41-.91c11.76-28.03 28.86-53.26 50-74.39 21.43-21.43 46.98-38.67 75.36-50.44C170.8 6.28 200.83 0 232.21 0zm163.25 328.33c-.04-4.58-.46-7.86 5.22-7.78l18.42.22c5.94-.03 7.52 1.85 7.45 7.42v25.13h24.98c4.58-.04 7.86-.47 7.77 5.22l-.22 18.43c.03 5.93-1.84 7.51-7.42 7.44h-25.11v25.11c.07 5.57-1.51 7.45-7.45 7.42l-18.42.22c-5.68.08-5.26-3.2-5.22-7.78v-24.97h-25.12c-5.58.07-7.46-1.51-7.43-7.44l-.21-18.43c-.09-5.69 3.19-5.26 7.77-5.22h24.99v-24.99zm15.53-60.47c27.9 0 53.16 11.31 71.43 29.58l.44.48c18.02 18.25 29.14 43.34 29.14 70.94 0 27.9-11.31 53.16-29.58 71.43-18.27 18.27-43.53 29.58-71.43 29.58-27.85 0-53.13-11.31-71.4-29.6-18.29-18.25-29.6-43.51-29.6-71.41 0-27.86 11.31-53.12 29.6-71.39 18.25-18.3 43.52-29.61 71.4-29.61zm60.63 40.38c-15.51-15.51-36.95-25.11-60.63-25.11-23.67 0-45.12 9.6-60.62 25.11-15.52 15.47-25.11 36.92-25.11 60.62 0 23.68 9.6 45.13 25.11 60.63 15.47 15.52 36.91 25.11 60.62 25.11 23.68 0 45.12-9.6 60.63-25.11 15.51-15.5 25.11-36.95 25.11-60.63 0-23.49-9.43-44.78-24.69-60.22l-.42-.4z"/></svg>
+                  
+                    Dodaj radnika</a>
+                </li>
+                <li>
+                   <a href="/listaRadnika" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 mr-2 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 113.25 122.88" fill="currentColor" xml:space="preserve">
+                    <g>
+                        <path class="st0" d="M77.59,78.72h27.16c4.67,0,8.5,3.82,8.5,8.5v27.17c0,4.67-3.82,8.49-8.5,8.49H77.59c-4.67,0-8.5-3.82-8.5-8.49   V87.22C69.1,82.55,72.92,78.72,77.59,78.72L77.59,78.72z M60.73,113.25c1.76,0,3.18,1.42,3.18,3.18c0,1.76-1.42,3.18-3.18,3.18   H7.39c-2.04,0-3.88-0.83-5.23-2.17C0.83,116.09,0,114.25,0,112.21V7.39c0-2.04,0.83-3.88,2.17-5.23C3.51,0.83,5.36,0,7.39,0h90.81   c2.04,0,3.88,0.84,5.22,2.17c1.34,1.34,2.17,3.19,2.17,5.23v61.23c0,1.76-1.42,3.18-3.18,3.18c-1.75,0-3.18-1.42-3.18-3.18V7.39   c0-0.28-0.12-0.54-0.31-0.73c-0.19-0.19-0.45-0.31-0.72-0.31H7.39c-0.28,0-0.54,0.12-0.74,0.3c-0.18,0.2-0.3,0.45-0.3,0.74v104.8   c0,0.28,0.12,0.54,0.31,0.73c0.19,0.19,0.45,0.31,0.74,0.31L60.73,113.25L60.73,113.25L60.73,113.25z M33.04,56.37   c-0.6-1.04-0.17-4.02,1.13-5.07c3.7-2.16,8.8-1.49,12.36-3.98c0.21-0.31,0.43-0.76,0.65-1.25c0.32-0.74,0.62-1.55,0.81-2.1   c-0.79-0.93-1.47-1.98-2.12-3.02l-2.14-3.41c-0.78-1.17-1.19-2.24-1.21-3.11c-0.01-0.41,0.06-0.78,0.21-1.12   c0.16-0.35,0.4-0.63,0.74-0.86c0.16-0.11,0.33-0.2,0.52-0.26c-0.14-1.85-0.19-4.18-0.1-6.13c0.04-0.46,0.14-0.93,0.26-1.39   c0.55-1.96,1.92-3.53,3.62-4.61c0.94-0.6,1.96-1.05,3.03-1.35c0.68-0.2-0.58-2.37,0.12-2.44c3.4-0.35,8.91,2.76,11.28,5.33   c1.19,1.29,1.94,2.99,2.1,5.25l-0.13,5.56l0,0c0.59,0.18,0.97,0.56,1.13,1.17c0.17,0.68-0.01,1.63-0.59,2.93l0,0   c-0.01,0.02-0.02,0.05-0.04,0.07l-2.44,4.02c-0.9,1.48-1.81,2.96-2.99,4.13c0.11,0.16,0.22,0.31,0.33,0.47   c0.48,0.71,0.97,1.42,1.6,2.05c0.02,0.02,0.04,0.04,0.05,0.07c2.81,1.99,9.65,2.47,12.28,3.93l0.11,0.06   c1.35,1.04,1.77,4.02,1.15,5.06H33.04L33.04,56.37z M30.89,92.81c-1.75,0-3.19-1.44-3.19-3.22c0-1.77,1.42-3.22,3.19-3.22h21.62   c1.76,0,3.19,1.44,3.19,3.22c0,1.78-1.42,3.22-3.19,3.22H30.89L30.89,92.81L30.89,92.81z M30.89,72.68c-1.75,0-3.18-1.42-3.18-3.18   c0-1.75,1.42-3.18,3.18-3.18h42.87c1.76,0,3.18,1.42,3.18,3.18c0,1.76-1.42,3.18-3.18,3.18H30.89L30.89,72.68L30.89,72.68z    M88.41,90.82c0-1.53,1.24-2.77,2.77-2.77s2.77,1.24,2.77,2.77v7.21h7.21c1.53,0,2.77,1.24,2.77,2.77s-1.24,2.77-2.77,2.77h-7.21   v7.21c0,1.53-1.24,2.77-2.77,2.77s-2.77-1.24-2.77-2.77v-7.21h-7.22c-1.53,0-2.77-1.24-2.77-2.77s1.24-2.77,2.77-2.77h7.21   L88.41,90.82L88.41,90.82L88.41,90.82z"/>
+                    </g>
+                    </svg>
+                    Pregled radnika</a>
+                </li>
+          </ul>
+           </li>
+           <%}%>
+           <li>
+            <a href="/kalendar" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <i class="fa fa-calendar flex-shrink-0 w-5 h-5 mr-2 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+               <span class="flex-1 whitespace-nowrap">Kalendar</span>
+            </a>
+         </li>
+
+        </ul>
+     </div>
+  </aside>
+  
+
+  <script>
+
+    var prikazAside = document.getElementById('aside');
+    var aside = document.getElementById('logo-sidebar');
+
+    prikazAside.addEventListener('click', (event) => {
+        event.preventDefault();
+        aside.classList.toggle('-translate-x-full')
+    
+    })
+   
+    var userPostavke = document.getElementById('userPostavke');
+    var userPostavkeLista = document.getElementById('userPostavkeLista');
+
+    userPostavke.addEventListener('click', (event) => {
+        event.preventDefault();
+        userPostavkeLista.classList.toggle('hidden')
+    
+    })
+
+    const projects = document.getElementById("projects");
+    const addproject = document.getElementById("addproject");
+
+    projects?.addEventListener('click', () => {
+        if(addproject.style.display == "none"){
+        addproject.style.display = "flex";
+        } else {
+        addproject.style.display = "none";
+        }
+    })
+
+
+    const users = document.getElementById("users");
+    const adduser = document.getElementById("adduser");
+
+
+    users?.addEventListener('click', () => {
+        if(adduser.style.display == "none"){
+        adduser.style.display = "flex";
+        } else {
+        adduser.style.display = "none";
+        }
+    })
+
+  const chat = document.getElementById('chatOpen');
+
+    chat.addEventListener('click', () => {
+      if(document.getElementById('spisakZaChat').style.display === "none"){
+         document.getElementById('spisakZaChat').style.display = "block"
+      }else {
+         document.getElementById('spisakZaChat').style.display = "none"
+      }
+       })
+  
+    const notification= document.getElementById('notificationOpen');
+
+    notification.addEventListener('click', () => {
+      if(document.getElementById('spisakObavijesti').style.display === "none"){
+         document.getElementById('spisakObavijesti').style.display = "block"
+      }else {
+         document.getElementById('spisakObavijesti').style.display = "none"
+      }
+    })
+
+  </script>
+    
+  

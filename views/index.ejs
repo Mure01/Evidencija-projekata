@@ -2,20 +2,58 @@
 <html>
   <head>
     <title>Evidencija projekata</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
     <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+  
 
-    <div class="w-full h-[100vh] flex flex-col items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-500" ">
-    <h1 class="absolute top-[100px] uppercase text-3xl font-semibold tracking-widest">Evidencija projekata</h1>
- 
-      <form action="/login" method="post" class="flex flex-col w-1/4 space-y-5 " >
-        <label class="">Korisničko ime:</label>
-        <input type="text" name="username" placeholder="Username" class="bg-[#ddd] p-3 rounded-xl" >
-        <label class="">Lozinka:</label>       
-        <input type="password" name="password" placeholder="********" class="bg-[#ddd] p-3 rounded-xl" >
-        <button type="submit" class="uppercase bg-blue-600 text-white p-3 rounded-xl font-bold tracking-widest mt-32">Prijavite se</button>
-      </form>
-    </div>
+  </head>
+  <body >
+   
+    <div class="sm:w-10/12 m-auto sm:h-[80vh] flex-col md:flex-row flex sm:mt-[10vh]  items-center justify-stretch" >
+        
+      <div class=" w-full md:w-1/2 bg-sky-600 h-fit sm:h-full  flex flex-col text-center space-y-10 relative">
+        <div class="h-fit flex text-white uppercase font-semibold text-xl absolute top-2 left-2 items-center space-x-3">
+          <img src="\images\presentation_8258254.png" class="h-10 w-10 sm:h-16 sm:w-16 "/>
+          <h1>Evidencija projekata</h1>
+        </div>
+        <div class="absolute bottom-0 w-full sm:border-b-2 border-sky-600 sm:border-l-2">
+          <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+          <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+          </defs>
+          <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+          <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+          </g>
+          </svg>
+          </div>
+
+        <div class=" pt-10 sm:pt-32">
+          <h1 class="text-white text-2xl sm:text-3xl uppercase font-semibold ">Dobro došli nazad</h1>
+          <h1 class="text-white text-xl pb-24 sm:pb-0 px-5 first-letter:uppercase pt-3 sm:pt-10"> vaša priča uspjeha. Prijavite se, oblikujte radne trenutke,
+            i zajedno gradimo projekte s osobnim pečatom!</h1>
+          </div>
+        </div>
+
+
+
+        <div class="w-full py-10 sm:py-0 sm:w-1/2 bg-white border-sky-600 border-0 sm:border-2 h-full flex items-center flex-col justify-center relative">
+          <h1 class="uppercase text-2xl sm:absolute top-8 font-semibold tracking-widest">Prijavite se</h1>
+          <form action="/login" method="post" class="pt-5 flex flex-col w-11/12 sm:w-2/3 space-y-5" >
+            <label class="">Korisničko ime:</label>
+            <input type="text" name="username" placeholder="Username" class="border-2  shadow-2xl p-3 rounded-xl" >
+            <label class="">Lozinka:</label>       
+            <input type="password" name="password" placeholder="********" class="border-2 p-3 shadow-2xl rounded-xl" >
+            <button type="submit" class="shadow-2xl uppercase bg-blue-600 text-white p-3 rounded-xl font-bold tracking-widest mt-32">Prijavite se</button>
+          </form>
+        </div>
+        
+      
+      
+      </div>
   </body>
 </html>

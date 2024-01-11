@@ -1,0 +1,258 @@
+<div id="spisakObavijesti" class="fixed w-fit h-80 overflow-y-scroll scrollbar-thumb-indigo-500 scrollbar-thin
+ hidden text-white z-10 right-10 px-4 pt-2 rounded-b-xl top-16 bg-gray-700">
+</div>
+
+
+
+
+    <div id="spisakZaChat" class="fixed hidden right-5 top-16 flex-col h-fit z-10 py-4 bg-gray-700 w-fit shadow-2xl  rounded-b-2xl ml-10">
+
+        <%chatData.radnici.map((radnik) => {%>
+            <%if(radnik._id != chatData.userId) {%>
+            <div class="flex items-center justify-between h-fit p-2 space-x-3 ">
+                <h1 class="text-white cursor-pointer" onclick="openChat(<%= JSON.stringify(radnik)%>)" >
+                    <%=radnik.ime +" "+ radnik.prezime%>
+                </h1>
+                <% if(radnik.online === "1") {%>
+            
+                    <span id="<%=radnik._id%>-status" class="bg-green-600 p-1 text-xs rounded-md text-white">Aktivan</span>
+            
+                    <%} else {%>
+            
+                        <span id="<%=radnik._id%>-status" class="bg-red-600 p-1 text-xs rounded-md text-white">Neaktivan</span>
+
+                        <%}%>
+            </div>
+            <%}%>
+        <%})%>
+
+    </div>
+        
+        
+        <div id="chat" class="hidden fixed h-[500px] flex-col items-center
+        p-1 shadow-2xl bottom-0 sm:right-10 w-[410px] bg-gray-800 text-white z-10 rounded-lg"> 
+    <div class="w-full py-3 px-3 flex justify-between items-center">
+        <h1 id="primaoc"></h1>
+        <span class="fa fa-close cursor-pointer" id="closeChat"></span>
+    </div>
+            <div id="chatBox" class="flex flex-col overflow-y-scroll px-2 scrollbar-thumb-indigo-500 scrollbar-thin h-[380px] pb-5 scroll-m-0 w-full">
+            
+            </div>
+                
+            <form id="formaZaPoruke" action="" class="flex justify-between items-center absolute bottom-6 w-full px-3">
+                <input name="posiljaoc" id="posiljaocId" class="hidden" />
+                <input name="primaoc" id="primaocId"  class="hidden"/>
+                <input id="poruka" type="text" placeholder="Napisite poruku..." name="poruka" class="w-[80%] bg-[#ddd] p-2 rounded-l-lg text-black">
+                <button type="submit" class=" text-white p-2 w-[20%] bg-green-600 rounded-r-lg">Posalji</button>
+            </form>
+        </div>
+
+</div>
+
+</main>
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+
+var posiljaocId = '<%= chatData.userId%>'
+var posiljaocIme = '<%= chatData.ime%>'
+var socket = io('/konektovan', {
+    auth: {
+        token: posiljaocId
+    },
+    
+})
+if(posiljaocId !== undefined){
+    socket.emit('citajObavjesti');
+}
+
+document.getElementById('closeChat').addEventListener('click', () => {
+    document.getElementById('chat').style.display = 'none';
+})
+
+
+var primaocId = '';
+const openChat = (radnik) => {
+
+    const {_id, ime} = radnik
+    primaocId = _id;
+
+    document.getElementById('posiljaocId').value = posiljaocId;
+    document.getElementById('primaocId').value = _id;
+
+    document.getElementById('spisakZaChat').style.display = 'none';
+    document.getElementById('chat').style.display = 'flex';
+    document.getElementById('primaoc').innerHTML = "Primaoc: "+ ime;
+
+    socket.emit('existsChats', {posiljaoc: posiljaocId, primaoc: primaocId});
+}
+
+socket.on('onlineUser', function(data) {
+    $('#'+data.userId+'-status').text('Aktivan');
+    $('#'+data.userId+'-status').addClass('bg-green-600');
+    $('#'+data.userId+'-status').removeClass('bg-red-600');
+})
+
+socket.on('offlineUser', function(data) {
+    $('#'+data.userId+'-status').text('Neaktivan');
+    $('#'+data.userId+'-status').addClass('bg-red-600');
+    $('#'+data.userId+'-status').removeClass('bg-green-600');
+})
+
+$('#formaZaPoruke').submit((event) => {
+    event.preventDefault();
+    let poruka = $('#poruka').val();
+    
+    $.ajax({
+        url: '/dodajPoruku',
+        type: 'POST',
+        data: {posiljaoc: posiljaocId, primaoc: primaocId, poruka: poruka, ime: posiljaocIme},
+
+        success:function(response) {
+            if(response.success) {
+                $('#poruka').val('');
+                let poruka = response.poruka.poruka;
+                let ime = response.poruka.ime;
+                let porukaZaDodat = `<div class=" flex text-right flex-col my-1 bg-sky-600 p-2 rounded-md text-white"> ` 
+                + `<h1> <i class="fa fa-user"></i>` +  ime + `</h1>`
+                + `<h1>` +  poruka + `</h1>`
+               +` </div>`;
+                $('#chatBox').append(porukaZaDodat);
+                socket.emit('message', response.poruka);
+                socket.emit('newChat', response.poruka);
+                scrollChat();
+
+            } else {
+                console.log("error")
+            }
+        }
+    })
+
+})
+
+socket.on('loadNewChat', (poruka) => {
+    if( posiljaocId == poruka.primaoc && primaocId == poruka.posiljaoc) {
+        let porukaZaDodat = `<div class="text-left flex flex-col my-1 bg-sky-600 p-2 rounded-md text-white"> ` 
+                + `<h1> <i class="fa fa-user"></i>` +  poruka.ime + `</h1>`
+                + `<h1 >` +  poruka.poruka + `</h1>`
+               +` </div>`;
+        $('#chatBox').append(porukaZaDodat);
+    }
+    scrollChat();
+
+})
+
+
+socket.on('loadChats', (data) => {
+    $('#chatBox').html('')
+    var chats = data.chats;
+
+    let porukaZaDodat = '';
+    let klasa = '';
+
+    if(chats.length > 0) {
+        chats.map((chat) => {
+        if(chat.posiljaoc == posiljaocId) {
+            klasa = 'flex text-right flex-col my-1 bg-sky-600 p-2 rounded-md text-white'
+        }else {
+            klasa = 'text-left flex flex-col my-1 bg-sky-600 p-2 rounded-md text-white'
+        }
+        porukaZaDodat += `<div class="${klasa}"> `
+            + `<h1> <i class="fa fa-user"></i>` +  chat.imePosiljaoca + `</h1>`
+            + `<h1 >` +  chat.poruka + `</h1>`
+            + `</div>`;
+        
+            })
+            $('#chatBox').append(porukaZaDodat);
+        } else {
+            porukaZaDodat += `<h1 class="uppercase font-semibold pt-3">Nemate poruka sa ovim korisnikom</h1>`
+            $('#chatBox').append(porukaZaDodat);
+        }
+        scrollChat();
+    })
+
+
+    socket.on('response', () => {
+        socket.emit('citajObavjesti')
+    })
+
+    var username = '<%= chatData.username%>'
+
+    socket.on('prikaz', (obavjesti) => {
+
+        $('#spisakObavijesti').html('')
+        let brojObavjesti = document.getElementById("brojObavjesti")
+        let brojacObavjest = 0;
+        let spisak = document.createElement('div')
+
+        obavjesti.map((o) => {
+            let dio = document.createElement('div')
+            if(o.primaoc === posiljaocId || o.primaoc === username){
+                brojacObavjest++
+                dio.id = o.posiljaoc
+                dio.classList.add( o.posiljaoc, o.imePosiljaoca, o._id, o.vrsta , o.projekat, 'bg-sky-600', 'klikniObavjest','flex', 'flex-col', 'mb-1', 'w-full', 'p-2', 'rounded-md');
+                let h = document.createElement('h1');
+                h.innerHTML = o.imePosiljaoca
+                h.classList.add( o.posiljaoc, o.imePosiljaoca, o._id, o.vrsta, o.projekat)
+                let p = document.createElement('p');
+                p.classList.add(o.posiljaoc, o.imePosiljaoca, o._id,o.vrsta, o.projekat, 'w-52', 'truncate',)
+                p.innerHTML = o.poruka
+                
+                dio.append(h, p)
+                spisak.append(dio)
+            }   
+        })
+        
+        if(spisak.childElementCount === 0) {
+            let h = document.createElement('h1');
+            h.classList.add('block', 'bg-sky-500', 'py-3', 'px-1' , 'rounded-md')
+            h.innerHTML = "Nemate obavijesti"
+            spisak.append(h)
+        }
+
+        
+        $("#spisakObavijesti").append(spisak)
+        brojObavjesti.innerHTML = brojacObavjest;
+
+        $('.klikniObavjest').on('click', function () {
+        const klaseObavjesti = event.target.classList;
+
+        const posiljaocIdKlasno = klaseObavjesti[0]
+        const imePosiljaocaKlasa = klaseObavjesti[1]
+        const obavjestId = klaseObavjesti[2]
+        const obavjestVrsta = klaseObavjesti[3]
+        const projekat = klaseObavjesti[4]
+
+        document.getElementById('spisakObavijesti').style.display = 'none'
+
+        if(obavjestVrsta === 'poruka'){
+            let radnik = {_id: posiljaocIdKlasno, ime: imePosiljaocaKlasa }
+            openChat(radnik)
+            socket.emit('azurirajObavjest', {obavjestId, posiljaocIdKlasno, posiljaocId, obavjestVrsta})
+        }else if(obavjestVrsta ==="projekat") {
+            socket.emit('azurirajObavjest', {obavjestId, obavjestVrsta})
+            window.location.href = '/listaProjekataZaRadnika';
+        }
+    });
+
+})
+
+
+function scrollChat() {
+    $('#chatBox').animate({
+        scrollTop:$('#chatBox').offset().top+$('#chatBox')[0].scrollHeight
+    }, 0);
+}
+
+
+
+
+
+
+
+
+</script>

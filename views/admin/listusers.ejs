@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html class="dark" >
 <head>
-    <title>Admin</title>
+    <title>Evidencija - uposlenici</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel=" stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
-	<link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel=" stylesheet">
 	<!--Regular Datatables CSS-->
 	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 	<!--Responsive Extension Datatables CSS-->
@@ -107,14 +109,14 @@
 
 <body>
 
+    <%- include("../partials/chat.ejs") %>
 
     <main class="flex w-full">
-        <div class="w-[15%]">
-            <%- include("../partials/sidebarAdmin.ejs") %>
+        <div class="w-0 sm:w-[15%]">
+            <%- include("../partials/navAll.ejs") %>
         </div>
 
-        <div class="w-[85%]">
-            <%- include("../partials/navbar.ejs") %>
+        <div class=" w-full sm:w-[85%] mt-16">
 
         <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-8 py-8  text-xl md:text-2xl">
             Spisak zaposlenika
@@ -132,7 +134,8 @@
                                     <th data-priority="3">Pozicija</th>
                                     <th data-priority="4">Email</th>
                                     <th data-priority="5">Korisnicko ime</th>
-									<th data-priority="6">Obrisi</th>
+									<th data-priority="6">Radno vrijeme</th>
+									<th data-priority="7">Obrisi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,6 +146,7 @@
                                         <td><%= radnik.pravilo  %></td>
                                         <td><%= radnik.email  %></td>
                                         <td><%= radnik.username  %></td>
+                                        <td> <a href=<%= '/radnoVrijemeRadnika/'+radnik._id  %> > Pregled </a> </td>
                                         <td> 
 											<form method="post" action=<%= '/obrisiRadnika/' + radnik._id %> >
 												<button type="submit"><i class="fa fa-trash"></i> </button> </td>

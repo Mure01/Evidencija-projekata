@@ -33,9 +33,15 @@ const usersSchema = new Schema(
         administrator: {
             type: Boolean,
             default: false
+        },
+        online: {
+            type: String,
+            default: '0'
         }
         
-    }
+    },
+    {timestamps: true}
+
 );
 
 module.exports = mongoose.model('Users', usersSchema);
