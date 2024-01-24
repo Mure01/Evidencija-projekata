@@ -5,8 +5,12 @@ const projectsModel = require('../models/projects');
 const activityModel = require('../models/activity');
 const userModel = require('../models/users');
 const activity = require('../models/activity');
-const prisustvoModel = require('../models/prisustvo');
+const prisustvo = require('../models/prisustvo');
+const chat = require('../models/chat');
+
+
 const adminPanel =  async (req, res, next) => {
+
 
     const projekti = await projectsModel.find().sort({datumKraja: -1});
     const radnici = await userModel.find();
@@ -142,7 +146,6 @@ const izvjestaj = async (req, res, next) => {
         })
         return spisakSve
     }
-
     const rezultatSaRadnicima = await dobaviPodatkeSaRadnicima()
     res.render('admin/reports', {admin: req.session.admin, izvjestaj: rezultat, izvjestajSaRadnicima: rezultatSaRadnicima});
 }

@@ -6,9 +6,6 @@ const kript = require('bcryptjs')
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 
-
-const PDFDocument = require('pdfkit');
-
 const {transporter} = require('../config');
 
 
@@ -108,9 +105,8 @@ const radnoVrijeme = await prisustvoModel.find({
 router.post('/slanjeIzvjestajaAdminu', isAuth, async (req, res, next) => {
         const tableHtml = req.body.tabelaHtml;
         const cssTabele = req.body.cssTabele;
-
         async function createPdf() {
-            const browser = await puppeteer.launch({ headless: true });
+            const browser = await puppeteer.launch({ headless: "new" });
 
             htmlContent = `
             <html>
@@ -118,14 +114,14 @@ router.post('/slanjeIzvjestajaAdminu', isAuth, async (req, res, next) => {
             <style>
             ${cssTabele}
             </style>
+            </head>
             <body>
             ${tableHtml}
             </body>
             </html>
             `
             const page = await browser.newPage();
-            await page.setContent(htmlContent, { waitUntil: "load"});
-            await page.addStyleTag({content: cssTabele})
+            await page.setContent( htmlContent ,{ waitUntil: "domcontentloaded"});
             await page.pdf({path: 'izvjestaj.pdf', format: 'A4'}); // kreiranje PDF-a
           
             await browser.close();

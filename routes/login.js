@@ -12,8 +12,6 @@ router.post('/login', async (req, res) => {
     if(!user) {
         return res.redirect('/');
     }
-    
-
     const isMatch = await kript.compare(password, user.password);
 
     if(!isMatch){

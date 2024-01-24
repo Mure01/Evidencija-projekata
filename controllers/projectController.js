@@ -34,8 +34,8 @@ const dodajProjekatAdmin = async (req, res, next) => {
     const mailOptions = {
       from: 'belci911mu@gmail.com',
       to: poslatiMailove,
-      subject: 'Testna email poruka',
-      text: 'Ovo je testna email poruka poslata pomoću Nodemailer biblioteke.',
+      subject: 'Novi projekat',
+      text: 'Upravo ste dodani na novi projekat na sistemu Evidencija projekata.',
     };
     
     transporter.sendMail(mailOptions, (err, info) => {
